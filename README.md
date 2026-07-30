@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# React Shop — Next.js Migration 🚀
 
-## Getting Started
+This project is a modern e-commerce application who's migrate from a Single Page Application (Vite + React Router) to **Next.js 15 (App Router)**.
+
+---
+
+## 🏗️ Migration Status & Architecture Overview
+
+The migration shifts data-fetching and routing logic to the server side, leveraging Server Components (SSR) for improved SEO and performance, while keeping interactive components isolated on the client.
+
+## 📊 Migration Progress
+
+### Completed
+
+- [x] Unified `App.tsx` entry logic into `app/layout.tsx`.
+- [x] Integrated `CartProvider`.
+- [x] Migrated core routing: Home, Cart, Category, Product, About pages.
+- [x] Completed dynamic route migration (`/product/[id]`, `/categories/[slug]`).
+
+### In Progress / Pending
+
+- [ ] Migrate Search, Support pages on Next.
+- [ ] Add loaders and 404 page
+- [ ] Replace standard `<img>` tags with `next/image` optimization.
+- [ ] Implement dynamic SEO via `generateMetadata()`.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **State Management:** React Context + `useReducer`
+
+---
+
+## 📁 Updated File Structure Highlights
+
+```text
+app/
+ ├── (site)/                        # Main layout group
+ │    ├── page.tsx                  # Home Page (Renders Category Grid)
+ │    ├── category/
+ │    │    └── [categoryId]/
+ │    │         ├── page.tsx        # Async Server Component (Fetches category products)
+ │    │         ├── CategoryClient.tsx # Client Component (Handles sorting & grid UI)
+ │    │         └── product/
+ │    │              └── [productId]/
+ │    │                   ├── page.tsx # Async Server Component (Fetches single product & related items)
+ │    │                   └── ProductDetailsClient.tsx # Client Component (Cart integration & routing)
+ │    ├── cart/page.tsx             # Shopping Cart view
+ │    ├── search/page.tsx           # Product search page
+ │    ├── about/page.tsx            # Static About view
+ │    └── support/page.tsx          # Support view
+ ├── api/data.ts                    # Server-side data fetching helper methods
+ ├── components/                    # Reusable UI elements (Header, Footer, Modals, Breadcrumbs)
+ ├── context/CartProvider.tsx       # Cart Context using useReducer (Client-side global state)
+ └── types/index.ts                 # TypeScript type definition
+```
+
+---
+
+## 🚀 Getting Started
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

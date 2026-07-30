@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-poppins), sans-serif;
+
+  --background-image-grad-default: linear-gradient(
+    to bottom right,
+    #6b7280,
+    #374151
+  );
+  --background-image-grad-electronics: linear-gradient(
+    to bottom right,
+    #6366f1,
+    #9333ea
+  );
+  --background-image-grad-clothing: linear-gradient(
+    to bottom right,
+    #a855f7,
+    #7c3aed
+  );
+  --background-image-grad-books: linear-gradient(
+    to bottom right,
+    #64748b,
+    #9333ea
+  );
+  --background-image-grad-furniture: linear-gradient(
+    to bottom right,
+    #818cf8,
+    #4338ca
+  );
+  --background-image-grad-outdoor: linear-gradient(
+    to bottom right,
+    #6366f1,
+    #16a34a
+  );
+  --background-image-grad-games: linear-gradient(
+    to bottom right,
+    #ec4899,
+    #6366f1
+  );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.check-path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: draw 0.6s ease forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }

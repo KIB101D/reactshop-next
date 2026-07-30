@@ -1,0 +1,19 @@
+[
+  {
+    "id": "electronics",
+    "name": "Electronics",
+    "image": "/images/products/electronics.png"
+  },
+  {
+    "id": "clothing",
+    "name": "Clothing",
+    "image": "/images/products/clothing.png"
+  },
+  { "id": "books", "name": "Books", "image": "/images/products/books.png" },
+  {
+    "id": "furniture",
+    "name": "Furniture",
+    "image": "/images/products/furniture.png"
+  },
+  { "id": "games", "name": "Games", "image": "/images/products/games.png" }
+]

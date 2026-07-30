@@ -1,0 +1,465 @@
+[
+  {
+    "id": 1,
+    "categoryId": "electronics",
+    "title": "Laptop",
+    "price": 1200,
+    "image": "/images/products/laptop.png",
+    "description": "Powerful laptop for work, gaming and everything in between.",
+    "tags": ["tech", "work", "gaming", "portable", "performance"],
+    "rating": 4.6
+  },
+  {
+    "id": 2,
+    "categoryId": "electronics",
+    "title": "Smartphone",
+    "price": 800,
+    "image": "/images/products/smartphone.png",
+    "description": "Modern smartphone with a great camera and performance.",
+    "tags": ["mobile", "daily", "tech", "portable", "smart"],
+    "rating": 4.5
+  },
+  {
+    "id": 3,
+    "categoryId": "electronics",
+    "title": "Headphones",
+    "price": 150,
+    "image": "/images/products/headphones.png",
+    "description": "Comfortable headphones with immersive sound.",
+    "tags": ["audio", "music", "wireless", "daily"],
+    "rating": 4.3
+  },
+  {
+    "id": 4,
+    "categoryId": "electronics",
+    "title": "Monitor",
+    "price": 300,
+    "image": "/images/products/monitor.png",
+    "description": "High-resolution monitor for work and entertainment.",
+    "tags": ["display", "work", "gaming", "office"],
+    "rating": 4.4
+  },
+  {
+    "id": 5,
+    "categoryId": "clothing",
+    "title": "T-Shirt",
+    "price": 20,
+    "image": "/images/products/t-shirt.png",
+    "description": "Lightweight and breathable everyday t-shirt.",
+    "tags": ["casual", "summer", "daily", "minimal"],
+    "rating": 4.1
+  },
+  {
+    "id": 6,
+    "categoryId": "clothing",
+    "title": "Jeans",
+    "price": 50,
+    "image": "/images/products/jeans.png",
+    "description": "Classic denim jeans with a comfortable fit.",
+    "tags": ["denim", "casual", "streetwear", "daily"],
+    "rating": 4.3
+  },
+  {
+    "id": 7,
+    "categoryId": "clothing",
+    "title": "Jacket",
+    "price": 100,
+    "image": "/images/products/jacket.png",
+    "description": "Warm jacket suitable for colder weather.",
+    "tags": ["outerwear", "winter", "streetwear", "warm"],
+    "rating": 4.5
+  },
+  {
+    "id": 8,
+    "categoryId": "clothing",
+    "title": "Sneakers",
+    "price": 70,
+    "image": "/images/products/sneakers.png",
+    "description": "Comfortable sneakers for daily wear.",
+    "tags": ["shoes", "casual", "sport", "daily"],
+    "rating": 4.4
+  },
+  {
+    "id": 9,
+    "categoryId": "books",
+    "title": "Novel",
+    "price": 15,
+    "image": "/images/products/novel.png",
+    "description": "Engaging fictional story for relaxing reading.",
+    "tags": ["fiction", "reading", "story", "singleplayer"],
+    "rating": 4.0
+  },
+  {
+    "id": 10,
+    "categoryId": "books",
+    "title": "Textbook",
+    "price": 40,
+    "image": "/images/products/textbook.png",
+    "description": "Educational book for learning new concepts.",
+    "tags": ["education", "study", "science", "learning"],
+    "rating": 4.2
+  },
+  {
+    "id": 11,
+    "categoryId": "books",
+    "title": "Magazine",
+    "price": 10,
+    "image": "/images/products/magazine.png",
+    "description": "Latest news, trends and lifestyle content.",
+    "tags": ["lifestyle", "reading", "daily", "news"],
+    "rating": 3.8
+  },
+  {
+    "id": 12,
+    "categoryId": "books",
+    "title": "Comic Book",
+    "price": 12,
+    "image": "/images/products/comicBook.png",
+    "description": "Fun illustrated stories full of action.",
+    "tags": ["comics", "fun", "fiction", "adventure"],
+    "rating": 4.6
+  },
+  {
+    "id": 13,
+    "categoryId": "furniture",
+    "title": "Desk Chair",
+    "price": 200,
+    "image": "/images/products/deskChair.png",
+    "description": "Ergonomic chair for long working hours.",
+    "tags": ["office", "comfort", "work", "minimal"],
+    "rating": 4.5
+  },
+  {
+    "id": 14,
+    "categoryId": "furniture",
+    "title": "Table",
+    "price": 150,
+    "image": "/images/products/table.png",
+    "description": "Simple and functional table for home or office.",
+    "tags": ["home", "wood", "minimal", "office"],
+    "rating": 4.3
+  },
+  {
+    "id": 15,
+    "categoryId": "furniture",
+    "title": "Bookshelf",
+    "price": 120,
+    "image": "/images/products/bookshelf.png",
+    "description": "Spacious bookshelf for organizing your items.",
+    "tags": ["storage", "home", "organization", "wood"],
+    "rating": 4.4
+  },
+  {
+    "id": 16,
+    "categoryId": "furniture",
+    "title": "Lamp",
+    "price": 80,
+    "image": "/images/products/lamp.png",
+    "description": "Soft lighting for a cozy atmosphere.",
+    "tags": ["light", "home", "minimal", "cozy"],
+    "rating": 4.2
+  },
+  {
+    "id": 17,
+    "categoryId": "games",
+    "title": "The Man Disk",
+    "price": 30,
+    "image": "/images/products/TheManDisk.png",
+    "description": "Classic adventure game with a unique story.",
+    "tags": ["game", "story", "adventure", "singleplayer"],
+    "rating": 4.1
+  },
+  {
+    "id": 18,
+    "categoryId": "games",
+    "title": "The Man Disk 2",
+    "price": 35,
+    "image": "/images/products/TheManDisk2.png",
+    "description": "Sequel with improved gameplay and deeper narrative.",
+    "tags": ["game", "story", "adventure", "singleplayer", "sequel"],
+    "rating": 4.3
+  },
+  {
+    "id": 19,
+    "categoryId": "games",
+    "title": "Soulslike Game",
+    "price": 40,
+    "image": "/images/products/actionGame.png",
+    "description": "Like Dark Souls, but even your keyboard is trying to kill you. Emotional damage included.",
+    "tags": ["game", "hardcore", "souls-like", "dark-fantasy", "singleplayer"],
+    "rating": 4.8
+  },
+  {
+    "id": 20,
+    "categoryId": "games",
+    "title": "Board Game",
+    "price": 35,
+    "image": "/images/products/boardGame.png",
+    "description": "Complete DnD starter set for unforgettable adventures. Turns any friendly evening into a min-maxing war — no winners, only burned villagers.",
+    "tags": ["board", "party", "coop", "multiplayer", "fantasy"],
+    "rating": 4.7
+  },
+  {
+    "id": 21,
+    "categoryId": "books",
+    "title": "OOP Therapy Book",
+    "price": 25,
+    "image": "/images/products/selfHelp.png",
+    "description": "Recover from inheritance, polymorphism, and emotional damage.",
+    "tags": ["self-help", "dev", "mental-health", "programming", "study"],
+    "rating": 4.6
+  },
+  {
+    "id": 22,
+    "categoryId": "books",
+    "title": "Student Survival Guide",
+    "price": 18,
+    "image": "/images/products/adventureBook.png",
+    "description": "20 ways to survive on instant noodles and questionable mental-break advice. Side effects may include existential thoughts.",
+    "tags": ["adventure", "student", "survival", "fun", "study"],
+    "rating": 4.5
+  },
+  {
+    "id": 23,
+    "categoryId": "electronics",
+    "title": "Tablet",
+    "price": 500,
+    "image": "/images/products/tablet.png",
+    "description": "Portable tablet for work, media and browsing.",
+    "tags": ["tech", "portable", "media", "daily"],
+    "rating": 4.4
+  },
+  {
+    "id": 24,
+    "categoryId": "electronics",
+    "title": "Smartwatch",
+    "price": 250,
+    "image": "/images/products/smartwatch.png",
+    "description": "Track your health and notifications on the go.",
+    "tags": ["wearable", "fitness", "smart", "daily"],
+    "rating": 4.3
+  },
+  {
+    "id": 25,
+    "categoryId": "electronics",
+    "title": "Bluetooth Speaker",
+    "price": 120,
+    "image": "/images/products/speaker.png",
+    "description": "Compact speaker with powerful sound.",
+    "tags": ["audio", "portable", "wireless", "music"],
+    "rating": 4.5
+  },
+  {
+    "id": 26,
+    "categoryId": "electronics",
+    "title": "Webcam",
+    "price": 90,
+    "image": "/images/products/webcam.png",
+    "description": "HD webcam for meetings and streaming.",
+    "tags": ["work", "streaming", "camera", "office"],
+    "rating": 4.2
+  },
+
+  {
+    "id": 27,
+    "categoryId": "clothing",
+    "title": "Shorts",
+    "price": 30,
+    "image": "/images/products/shorts.png",
+    "description": "Lightweight shorts for summer days.",
+    "tags": ["summer", "casual", "sport", "daily"],
+    "rating": 4.1
+  },
+  {
+    "id": 28,
+    "categoryId": "clothing",
+    "title": "Sweater",
+    "price": 60,
+    "image": "/images/products/sweater.png",
+    "description": "Warm sweater for colder seasons.",
+    "tags": ["winter", "casual", "warm", "minimal"],
+    "rating": 4.3
+  },
+  {
+    "id": 29,
+    "categoryId": "clothing",
+    "title": "Cap",
+    "price": 25,
+    "image": "/images/products/cap.png",
+    "description": "Simple cap to complete your look.",
+    "tags": ["accessories", "streetwear", "daily", "minimal"],
+    "rating": 4.0
+  },
+  {
+    "id": 30,
+    "categoryId": "clothing",
+    "title": "Backpack",
+    "price": 70,
+    "image": "/images/products/backpack.png",
+    "description": "Durable backpack for daily use.",
+    "tags": ["travel", "daily", "storage", "portable"],
+    "rating": 4.5
+  },
+
+  {
+    "id": 31,
+    "categoryId": "books",
+    "title": "Cookbook",
+    "price": 20,
+    "image": "/images/products/cookbook.png",
+    "description": "Recipes for everyday cooking.",
+    "tags": ["cooking", "food", "home", "learning"],
+    "rating": 4.2
+  },
+  {
+    "id": 32,
+    "categoryId": "books",
+    "title": "History Book",
+    "price": 28,
+    "image": "/images/products/historyBook.png",
+    "description": "Explore important moments from the past.",
+    "tags": ["history", "education", "learning", "reading"],
+    "rating": 4.3
+  },
+  {
+    "id": 33,
+    "categoryId": "books",
+    "title": "Science Book",
+    "price": 35,
+    "image": "/images/products/scienceBook.png",
+    "description": "Understand how the world works.",
+    "tags": ["science", "education", "learning", "study"],
+    "rating": 4.4
+  },
+  {
+    "id": 34,
+    "categoryId": "books",
+    "title": "Fantasy Book",
+    "price": 22,
+    "image": "/images/products/fantasyBook.png",
+    "description": "A journey into magical worlds.",
+    "tags": ["fantasy", "fiction", "story", "adventure"],
+    "rating": 4.6
+  },
+
+  {
+    "id": 35,
+    "categoryId": "furniture",
+    "title": "Sofa",
+    "price": 600,
+    "image": "/images/products/sofa.png",
+    "description": "Comfortable sofa for your living room.",
+    "tags": ["home", "comfort", "cozy", "minimal"],
+    "rating": 4.5
+  },
+  {
+    "id": 36,
+    "categoryId": "furniture",
+    "title": "Bed",
+    "price": 700,
+    "image": "/images/products/bed.png",
+    "description": "Spacious bed for quality sleep.",
+    "tags": ["home", "sleep", "comfort", "cozy"],
+    "rating": 4.6
+  },
+  {
+    "id": 37,
+    "categoryId": "furniture",
+    "title": "Wardrobe",
+    "price": 500,
+    "image": "/images/products/wardrobe.png",
+    "description": "Organize your clothes efficiently.",
+    "tags": ["storage", "organization", "home", "minimal"],
+    "rating": 4.4
+  },
+  {
+    "id": 38,
+    "categoryId": "furniture",
+    "title": "Coffee Table",
+    "price": 180,
+    "image": "/images/products/coffeeTable.png",
+    "description": "Small table for your living space.",
+    "tags": ["home", "wood", "minimal", "cozy"],
+    "rating": 4.2
+  },
+  {
+    "id": 39,
+    "categoryId": "games",
+    "title": "Racing Game",
+    "price": 45,
+    "image": "/images/products/racingGame.png",
+    "description": "Fast-paced racing experience.",
+    "tags": ["game", "racing", "multiplayer", "competitive"],
+    "rating": 4.3
+  },
+  {
+    "id": 40,
+    "categoryId": "games",
+    "title": "Strategy Game",
+    "price": 50,
+    "image": "/images/products/strategyGame.png",
+    "description": "Plan, build and conquer.",
+    "tags": ["game", "strategy", "multiplayer", "competitive"],
+    "rating": 4.5
+  },
+  {
+    "id": 41,
+    "categoryId": "games",
+    "title": "Puzzle Game",
+    "price": 25,
+    "image": "/images/products/puzzleGame.png",
+    "description": "Solve challenges and train your brain.",
+    "tags": ["game", "puzzle", "casual", "singleplayer"],
+    "rating": 4.1
+  },
+  {
+    "id": 42,
+    "categoryId": "games",
+    "title": "Adventure Game",
+    "price": 55,
+    "image": "/images/products/adventureGame.png",
+    "description": "Explore worlds and uncover stories.",
+    "tags": ["game", "adventure", "story", "singleplayer"],
+    "rating": 4.4
+  },
+  {
+    "id": 43,
+    "categoryId": "games",
+    "title": "FPS Game",
+    "price": 60,
+    "image": "/images/products/fpsGame.png",
+    "description": "Fast reflexes and precision shooting.",
+    "tags": ["game", "shooter", "competitive", "multiplayer"],
+    "rating": 4.2
+  },
+  {
+    "id": 44,
+    "categoryId": "games",
+    "title": "Sandbox Game",
+    "price": 35,
+    "image": "/images/products/sandboxGame.png",
+    "description": "Create and explore freely.",
+    "tags": ["game", "sandbox", "creative", "singleplayer"],
+    "rating": 4.6
+  },
+  {
+    "id": 45,
+    "categoryId": "games",
+    "title": "Simulation Game",
+    "price": 40,
+    "image": "/images/products/simulationGame.png",
+    "description": "Realistic systems and gameplay.",
+    "tags": ["game", "simulation", "management", "singleplayer"],
+    "rating": 4.3
+  },
+  {
+    "id": 46,
+    "categoryId": "games",
+    "title": "Indie Game",
+    "price": 20,
+    "image": "/images/products/indieGame.png",
+    "description": "Unique experience from independent developers.",
+    "tags": ["game", "indie", "story", "singleplayer"],
+    "rating": 4.7
+  }
+]
