@@ -7,6 +7,7 @@ type PageProps = {
 };
 
 export default async function SearchPage({ searchParams }: PageProps) {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   const { q } = await searchParams;
   const query = q || "";
 

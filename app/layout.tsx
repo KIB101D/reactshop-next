@@ -32,12 +32,14 @@ export default async function RootLayout({
           <div className="flex flex-col min-h-screen">
             <Toaster position="top-right" style={{ top: "60px" }} />
             <Header />
-            <main className="flex flex-col flex-1 px-4 py-4 sm:px-6 md:px-5 sm:py-6">
-              <div className="w-full mx-auto max-w-7xl">
+
+            <main className="flex-1 px-4 py-4 sm:px-6 md:px-8 sm:py-6">
+              <div className="w-full mx-auto max-w-7xl flex flex-col flex-1">
                 <Breadcrumbs products={products} />
+                <div className="flex-1 pb-3">{children}</div>
               </div>
-              <div className="flex-1 pb-3">{children}</div>
             </main>
+
             <Footer />
           </div>
         </CartProvider>

@@ -10,12 +10,12 @@ The migration shifts data-fetching and routing logic to the server side, leverag
 
 ### 📄 Page Architecture Breakdown
 
-- **Home (`/`)**: Server Component (`page.tsx`)
+- **Home (`/`)**: Server Component (`page.tsx`) + `Suspense` fallback (`HomeSkeleton.tsx`)
 - **About (`/about`)**: Server Component (`page.tsx`)
 - **Cart (`/cart`)**: Client Component (`page.tsx`)
-- **Category (`/category/[categoryId]`)**: Server (`page.tsx`) + Client UI (`CategoryClient.tsx`)
+- **Category (`/category/[categoryId]`)**: Server (`page.tsx`) + Client UI (`CategoryClient.tsx`) + Category Loading (`loading.tsx`)
 - **Product Details (`/category/[categoryId]/product/[productId]`)**: Server (`page.tsx`) + Client UI (`ProductDetailsClient.tsx`)
-- **Search (`/search`)**: Server (`page.tsx`) + Client UI (`SearchClient.tsx`)
+- **Search (`/search`)**: Server (`page.tsx`) + Client UI (`SearchClient.tsx`) + Elastic SVG Loader (`loading.tsx`)
 - **Support (`/support`)**: Server Component (`page.tsx`)
 
 ---
@@ -31,11 +31,12 @@ The migration shifts data-fetching and routing logic to the server side, leverag
 - [x] Implemented Server/Client separation for data-heavy pages (Category, ProductDetails, Search).
 - [x] Replaced standard `<img>` tags with `next/image` optimization (`ProductImage`) across all main views.
 - [x] Restructured project layout (`api/data.ts` moved to `utils/data.ts`).
+- [x] **UI Loading States & Skeletons:** Added instant feedback with custom loaders (`search/loading.tsx`, `category/loading.tsx`), reusable `Skeleton` primitives, and custom Tailwind v4 animations in `globals.css`.
+- [x] Implement dynamic SEO metadata via `generateMetadata()`.
 
 ### In Progress / Pending
 
-- [ ] Add loaders (`loading.tsx`) and custom 404 page (`not-found.tsx`).
-- [ ] Implement dynamic SEO metadata via `generateMetadata()`.
+- [ ] Add custom 404 page (`not-found.tsx`).
 
 ---
 
@@ -43,7 +44,7 @@ The migration shifts data-fetching and routing logic to the server side, leverag
 
 - **Framework:** Next.js 15 (App Router)
 - **Language:** TypeScript
-- **Styling:** Tailwind CSS
+- **Styling:** Tailwind CSS v4
 - **State Management:** React Context + `useReducer`
 
 ---
@@ -52,24 +53,30 @@ The migration shifts data-fetching and routing logic to the server side, leverag
 
 ```text
 app/
+ ├── layout.tsx                     # Root layout (Fonts, Providers, Global UI)
+ ├── globals.css                    # Tailwind v4 theme & custom animation keyframes
  ├── (site)/                        # Main layout group
- │    ├── page.tsx                  # Home Page (Server Component)
+ │    ├── page.tsx                  # Home Page (Server Component with Suspense)
  │    ├── category/
  │    │    └── [categoryId]/
- │    │         ├── page.tsx        # Async Server Component (Fetches category products)
- │    │         ├── CategoryClient.tsx # Client Component (Handles sorting, filter & grid UI)
+ │    │         ├── page.tsx        # Async Server Component
+ │    │         ├── loading.tsx     # Loading fallback for category route
+ │    │         ├── CategoryClient.tsx # Client Component
  │    │         └── product/
  │    │              └── [productId]/
- │    │                   ├── page.tsx # Async Server Component (Fetches product & related items)
- │    │                   └── ProductDetailsClient.tsx # Client Component (Cart integration & UI)
- │    ├── cart/page.tsx             # Shopping Cart view (Client Component)
+ │    │                   ├── page.tsx
+ │    │                   └── ProductDetailsClient.tsx
+ │    ├── cart/page.tsx
  │    ├── search/
- │    │    ├── page.tsx             # Async Server Component (Handles search params & fetching)
- │    │    └── SearchClient.tsx     # Client Component (Renders search UI & results)
- │    ├── about/page.tsx            # Static About view (Server Component)
- │    └── support/page.tsx          # Support view (Server Component)
- ├── utils/data.ts                  # Server-side data fetching helper methods
- ├── components/                    # Reusable UI elements (ProductImage, Header, Footer, Modals)
- ├── context/CartProvider.tsx       # Cart Context using useReducer (Client-side global state)
- └── types/index.ts                 # TypeScript type definitions
+ │    │    ├── page.tsx             # Async Server Component with Suspense keying
+ │    │    ├── loading.tsx          # Elastic SVG spinner fallback
+ │    │    └── SearchClient.tsx
+ ├── components/                    # Reusable UI elements
+ │    ├── ui/
+ │    │    └── Skeleton.tsx         # Atomic pulse-skeleton component
+ │    ├── HomeSkeleton.tsx          # Skeleton layout for homepage
+ │    └── ProductCardSkeleton.tsx   # Refactored skeleton wrapper for product cards
+ ├── utils/data.ts
+ ├── context/CartProvider.tsx
+ └── types/index.ts
 ```

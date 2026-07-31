@@ -1,15 +1,15 @@
-function ProductCardSkeleton() {
+import { Skeleton } from "./ui/Skeleton";
+
+export default function ProductCardSkeleton() {
   return (
-    <div className="overflow-hidden bg-white shadow-sm rounded-2xl animate-pulse">
-      <div className="bg-gray-200 aspect-square" />
+    <div className="overflow-hidden bg-white shadow-sm rounded-2xl">
+      <Skeleton className="w-full aspect-square rounded-none" />
 
       <div className="p-4 space-y-3">
-        <div className="w-3/4 h-4 bg-gray-200 rounded" />
+        <Skeleton className="w-3/4 h-4 rounded" />
 
-        <div className="w-1/2 h-4 bg-gray-200 rounded" />
+        <Skeleton className="w-1/2 h-4 rounded" />
       </div>
     </div>
   );
 }
-
-export default ProductCardSkeleton;

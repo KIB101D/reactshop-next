@@ -20,6 +20,7 @@ export async function generateMetadata({
 }
 
 export default async function CategoryPage({ params }: PageProps) {
+  await new Promise((resolve) => setTimeout(resolve, 1200));
   const { categoryId } = await params;
   const products = await getProducts();
 

@@ -4,6 +4,8 @@
   --font-sans: var(--font-inter), sans-serif;
   --font-heading: var(--font-poppins), sans-serif;
 
+  --animate-elastic-line: elastic-arc 1.4s ease-in-out infinite;
+
   --background-image-grad-default: linear-gradient(
     to bottom right,
     #6b7280,
@@ -44,6 +46,21 @@
 @layer base {
   body {
     @apply font-sans;
+  }
+}
+
+@keyframes elastic-arc {
+  0% {
+    stroke-dasharray: 1px, 150px;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 85px, 150px;
+    stroke-dashoffset: -25px;
+  }
+  100% {
+    stroke-dasharray: 85px, 150px;
+    stroke-dashoffset: -120px;
   }
 }
 
