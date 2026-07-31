@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { getCategories } from "@/app/utils/data";
 import { CategoryGrid } from "@/app/components/CategoryGrid";
-import HomeSkeleton from "../components/HomeSkeloton";
+import HomeSkeleton from "../components/HomeSkeleton";
 
 async function HomeContent() {
   await new Promise((resolve) => setTimeout(resolve, 2000));
