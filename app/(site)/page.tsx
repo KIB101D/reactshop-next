@@ -1,5 +1,4 @@
-// app/(site)/page.tsx
-import { getCategories } from "../api/data";
+import { getCategories } from "../utils/data";
 import { CategoryGrid } from "../components/CategoryGrid";
 
 export default async function Home() {

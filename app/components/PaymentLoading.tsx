@@ -9,7 +9,7 @@ function PaymentLoading() {
 
       <div className="flex items-center justify-center mt-6 text-sm tracking-wide text-gray-900">
         <img
-          src={arasakaIcon}
+          src={arasakaIcon.src}
           alt="Arasaka"
           className="object-contain w-7 h-7"
         />

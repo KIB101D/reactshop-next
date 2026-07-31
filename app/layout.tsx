@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartProvider";
 import Breadcrumbs from "./components/Breadcrumbs";
 import { Toaster } from "sonner";
-import { getProducts } from "./api/data";
+import { getProducts } from "./utils/data";
 import { Inter, Poppins } from "next/font/google";
 
 const inter = Inter({

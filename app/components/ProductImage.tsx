@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import Image from "next/image";
 
 function ProductImage({ src, alt }: { src: string; alt: string }) {
   const [imageError, setImageError] = useState(false);
@@ -12,11 +15,12 @@ function ProductImage({ src, alt }: { src: string; alt: string }) {
   }
 
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
+      fill
       onError={() => setImageError(true)}
-      className="object-cover w-full h-full transition duration-300 hover:scale-105"
+      className="object-cover transition duration-300 hover:scale-105"
     />
   );
 }

@@ -58,7 +58,7 @@ function Cart() {
                     className="absolute flex items-center justify-center text-gray-400 transition border border-gray-300 rounded-md top-3 right-3 w-7 h-7 hover:text-red-500 hover:border-red-300 hover:bg-red-50"
                   >
                     <img
-                      src={deleteIcon}
+                      src={deleteIcon.src}
                       alt="delete"
                       className="w-4 h-4 opacity-70 hover:opacity-100"
                     />

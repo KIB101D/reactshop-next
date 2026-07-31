@@ -1,4 +1,5 @@
-import { getProducts } from "@/app/api/data";
+import type { Metadata } from "next";
+import { getProducts } from "@/app/utils/data";
 import ProductDetailsClient from "./ProductDetailsClient";
 
 type PageProps = {
@@ -7,6 +8,28 @@ type PageProps = {
     productId: string;
   }>;
 };
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { productId } = await params;
+  const products = await getProducts();
+  const product = products.find((p) => p.id === Number(productId));
+
+  if (!product) {
+    return { title: "Product not found" };
+  }
+
+  return {
+    title: `${product.title} — ReactShop`,
+    description: product.description.slice(0, 160),
+    openGraph: {
+      title: product.title,
+      description: product.description.slice(0, 160),
+      images: [{ url: product.image }],
+    },
+  };
+}
 
 export default async function ProductPage({ params }: PageProps) {
   const { categoryId, productId } = await params;

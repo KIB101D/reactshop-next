@@ -24,7 +24,7 @@ export default function ProductDetailsClient({
     <main key={product.id} className="pt-2 pb-10">
       <div className="grid max-w-7xl gap-8 mx-auto md:grid-cols-[minmax(280px,420px)_1fr] lg:grid-cols-[minmax(340px,520px)_1fr]">
         {/* Product Image */}
-        <div className="overflow-hidden bg-white shadow-sm rounded-2xl aspect-square lg:max-w-[620px] animate-fade-in">
+        <div className="relative overflow-hidden bg-white shadow-sm rounded-2xl aspect-square lg:max-w-[620px] animate-fade-in">
           <ProductImage src={product.image} alt={product.title} />
         </div>
 
@@ -109,7 +109,7 @@ export default function ProductDetailsClient({
                   href={`/category/${item.categoryId}/product/${item.id}`}
                   className="flex gap-3 p-2 transition rounded-2xl hover:bg-gray-50"
                 >
-                  <div className="overflow-hidden bg-gray-100 rounded-xl w-18 h-18">
+                  <div className="relative overflow-hidden bg-gray-100 rounded-xl w-18 h-18 shrink-0">
                     <ProductImage src={item.image} alt={item.title} />
                   </div>
 
