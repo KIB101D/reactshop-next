@@ -39,7 +39,7 @@ export default function CategoryClient({
     <div className="w-full mx-auto max-w-7xl">
       <div className="flex flex-row items-baseline justify-between">
         {/* Title */}
-        <h1 className="mt-2 sm:mt-3 mb-6 text-gray-800 capitalize font-heading font-semibold text-[clamp(1.8rem,3vw,3rem)]">
+        <h1 className=" text-gray-800 capitalize font-heading font-semibold text-[clamp(1.8rem,3vw,3rem)]">
           {decodeURIComponent(categoryId)}
         </h1>
         <div className="flex items-center justify-end mb-5">

@@ -1,15 +1,31 @@
 import { Suspense } from "react";
-import { getCategories } from "@/app/utils/data";
+import Hero from "@/app/components/Hero";
 import { CategoryGrid } from "@/app/components/CategoryGrid";
-import HomeSkeleton from "../components/HomeSkeleton";
+import { FlashSale } from "@/app/components/FlashSale";
+import { FeaturedProducts } from "@/app/components/FeaturedProducts";
+import HomeSkeleton from "@/app/components/HomeSkeleton";
+import { getCategories } from "@/app/lib/data/categories";
+import {
+  getFeaturedProducts,
+  getFlashSaleProducts,
+} from "@/app/lib/data/products";
 
 async function HomeContent() {
+  // Для тестування скелетона (видаліть setTimeout перед деплоєм)
   await new Promise((resolve) => setTimeout(resolve, 2000));
-  const categories = await getCategories();
+
+  const [categories, flashProducts, featuredProducts] = await Promise.all([
+    getCategories(),
+    getFlashSaleProducts(),
+    getFeaturedProducts(),
+  ]);
 
   return (
-    <div>
+    <div className="space-y-10 sm:space-y-16">
+      <Hero />
       <CategoryGrid categories={categories} />
+      <FlashSale products={flashProducts} />
+      <FeaturedProducts products={featuredProducts} />
     </div>
   );
 }

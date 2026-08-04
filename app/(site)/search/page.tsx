@@ -1,4 +1,4 @@
-import { getProducts } from "@/app/utils/data";
+import { getProducts } from "@/app/lib/data/products";
 import filterProducts from "@/app/utils/filterProducts";
 import SearchClient from "./SearchClient";
 

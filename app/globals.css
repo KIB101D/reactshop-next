@@ -41,6 +41,22 @@
     #ec4899,
     #6366f1
   );
+  --background-image-grad-hero: linear-gradient(
+    135deg,
+    #111827 0%,
+    #312e81 55%,
+    #4f46e5 100%
+  );
+  --background-image-grad-side1: linear-gradient(
+    135deg,
+    #4338ca 0%,
+    #7c3aed 100%
+  );
+  --background-image-grad-side2: linear-gradient(
+    135deg,
+    #be185d 0%,
+    #db2777 100%
+  );
 }
 
 @layer base {

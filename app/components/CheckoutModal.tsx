@@ -38,7 +38,6 @@ function CheckoutModal({
     }
   };
 
-  // Чистимо таймер, якщо компонент закрився раніше
   useEffect(() => {
     return () => clearTimer();
   }, []);
@@ -52,7 +51,7 @@ function CheckoutModal({
     if (status !== "idle") return;
     setStatus("loading");
 
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setStatus("success");
       removeAllFromCart();
 
@@ -61,7 +60,6 @@ function CheckoutModal({
       }, 3000);
     }, 1500);
   };
-
   return (
     <ModalWrapper onClose={onClose} canClose={status === "idle"}>
       {status === "idle" && (

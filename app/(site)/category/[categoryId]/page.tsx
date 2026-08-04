@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getProducts } from "@/app/utils/data";
+import { getProducts } from "@/app/lib/data/products";
 import CategoryClient from "./CategoryClient";
 
 type PageProps = {
