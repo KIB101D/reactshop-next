@@ -4,15 +4,11 @@ export type Product = {
   price: number;
   image: string;
   oldPrice?: number;
-  isFeatured?: boolean;
+  isFlashSale?: boolean;
   categoryId: string;
   description: string;
   tags: string[];
   rating: number;
-};
-
-export type FlashProduct = Product & {
-  oldPrice: number;
 };
 
 export type Category = {

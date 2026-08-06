@@ -19,7 +19,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
           Categories
         </h2>
         <Link
-          href="/categories"
+          href="/search"
           className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
         >
           See all

@@ -13,6 +13,7 @@ type CheckoutModalProps = {
   onClose: () => void;
   subtotal: number;
   shipping: number;
+  savings?: number;
   total: number;
   itemsCount: number;
   removeAllFromCart: () => void;
@@ -21,6 +22,7 @@ type CheckoutModalProps = {
 function CheckoutModal({
   onClose,
   subtotal,
+  savings = 0,
   shipping,
   total,
   itemsCount,
@@ -67,6 +69,7 @@ function CheckoutModal({
           handlePay={handlePay}
           onClose={onClose}
           subtotal={subtotal}
+          savings={savings}
           shipping={shipping}
           total={total}
           itemsCount={itemsCount}

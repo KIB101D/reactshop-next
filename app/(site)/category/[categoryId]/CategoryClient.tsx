@@ -6,6 +6,7 @@ import type { Product } from "@/app/types";
 import ProductImage from "@/app/components/ProductImage";
 import { sortProductsByPrice } from "@/app/utils/filterProductsByPrice";
 import SortToggleButton from "@/app/components/SortToggleButoon";
+import { SaleBadge } from "@/app/components/SaleBadge";
 
 type CategoryPageProps = {
   products: Product[];
@@ -25,7 +26,7 @@ export default function CategoryClient({
 
   if (sortedProducts.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex items-baseline justify-center min-h-[60vh]">
         <div className="max-w-md text-center">
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gray-900 font-heading">
             Nothing found
@@ -58,18 +59,31 @@ export default function CategoryClient({
             key={product.id}
             className="overflow-hidden transition bg-white shadow-sm rounded-lg animate-fade-in hover:shadow-md hover:-translate-y-0.5"
           >
-            <div className="relative *:overflow-hidden aspect-square">
+            <div className="relative overflow-hidden aspect-square">
               <ProductImage src={product.image} alt={product.title} />
+              {product.oldPrice && product.oldPrice > product.price && (
+                <SaleBadge
+                  price={product.price}
+                  oldPrice={product.oldPrice}
+                  size="md"
+                />
+              )}
             </div>
 
             <div className="p-2">
               <p className="text-[clamp(0.85rem,0.9vw,1.1rem)] text-gray-600 line-clamp-1">
                 {product.title}
               </p>
-
-              <p className="mt-1 font-semibold text-gray-900 text-[clamp(0.9rem,1vw,1.25rem)]">
-                ${product.price}
-              </p>
+              <div className="flex items-baseline gap-1.5 mt-1">
+                <p className="font-semibold text-gray-900 text-[clamp(0.9rem,1vw,1.25rem)]">
+                  ${product.price}
+                </p>
+                {product.oldPrice && (
+                  <span className="text-xs text-gray-400 line-through">
+                    ${product.oldPrice}
+                  </span>
+                )}
+              </div>
             </div>
           </Link>
         ))}

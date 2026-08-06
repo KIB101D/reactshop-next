@@ -32,7 +32,7 @@ function Breadcrumbs({ products }: BreadcrumbsProps) {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <div className="mt-4 text-sm text-gray-500 animate-slide-in">
+      <div className="mt-4 pb-1 text-sm text-gray-500 animate-slide-in">
         <Link href="/" className="transition hover:text-indigo-600">
           Home
         </Link>

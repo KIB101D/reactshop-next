@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
-import type { FlashProduct, Product } from "../../types";
+import type { Product } from "../../types";
 
 export async function getProducts(): Promise<Product[]> {
   const filePath = path.join(process.cwd(), "public/data/products.json");
@@ -8,16 +8,9 @@ export async function getProducts(): Promise<Product[]> {
   return JSON.parse(file);
 }
 
-export async function getFlashSaleProducts(): Promise<FlashProduct[]> {
+export async function getFlashSaleProducts(): Promise<Product[]> {
   const products = await getProducts();
-  const flashSaleIds = [1, 2, 19, 23];
-
-  return products
-    .filter((p) => flashSaleIds.includes(p.id))
-    .map((p) => ({
-      ...p,
-      oldPrice: Math.round(p.price * 1.25),
-    }));
+  return products.filter((p) => p.isFlashSale);
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
