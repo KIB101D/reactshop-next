@@ -21,10 +21,10 @@ export function FeaturedProducts({ products }: { products: Product[] }) {
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/product/${product.id}`}
-            className="group space-y-3"
+            href={`category/${product.categoryId}/product/${product.id}`}
+            className="group space-y-3 p-3 bg-white rounded-2xl border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
           >
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
+            <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
               {product.image ? (
                 <Image
                   src={product.image}
@@ -37,7 +37,7 @@ export function FeaturedProducts({ products }: { products: Product[] }) {
                 <div className="w-full h-full product-ph" />
               )}
             </div>
-            <p className="text-sm text-gray-600 line-clamp-1">
+            <p className="text-sm text-gray-700 line-clamp-1">
               {product.title}
             </p>
             <p className="font-semibold text-gray-900">${product.price}</p>
