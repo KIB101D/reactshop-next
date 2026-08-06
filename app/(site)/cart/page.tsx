@@ -208,7 +208,7 @@ function Cart() {
           {isCheckoutOpen && (
             <CheckoutModal
               onClose={() => setIsCheckoutOpen(false)}
-              subtotal={discountedSubtotal}
+              subtotal={subtotal}
               shipping={shipping}
               savings={totalSavings}
               total={total}

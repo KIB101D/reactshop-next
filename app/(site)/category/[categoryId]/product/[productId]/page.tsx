@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getProducts } from "@/app/lib/data/products";
+import { notFound } from "next/navigation";
 import ProductDetailsClient from "./ProductDetailsClient";
 
 type PageProps = {
@@ -38,11 +39,7 @@ export default async function ProductPage({ params }: PageProps) {
   const product = products.find((p) => p.id === Number(productId));
 
   if (!product) {
-    return (
-      <div className="p-20 text-3xl font-semibold flex items-center justify-center min-h-[50vh] font-heading">
-        Product not found
-      </div>
-    );
+    return notFound();
   }
 
   const relatedProducts = products
