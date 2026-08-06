@@ -20,7 +20,7 @@ export default function HomeSkeleton() {
           <Skeleton className="w-36 sm:w-44 h-8 rounded-lg" />
           <Skeleton className="w-16 h-5 rounded-lg" />
         </div>
-        <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 lg:grid lg:gap-4 lg:grid-cols-6 lg:mx-0 lg:px-0 lg:pb-0">
+        <div className="flex gap-3 overflow-x-clip pb-2 -mx-4 px-4 lg:grid lg:gap-4 lg:grid-cols-6 lg:mx-0 lg:px-0 lg:pb-0">
           {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton
               key={i}

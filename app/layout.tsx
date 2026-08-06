@@ -6,6 +6,7 @@ import Breadcrumbs from "./components/Breadcrumbs";
 import { Toaster } from "sonner";
 import { getProducts } from "./lib/data/products";
 import { Inter, Poppins } from "next/font/google";
+import ScrollToTop from "./components/ScrollToTop";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="bg-white text-gray-800 antialiased">
+        <ScrollToTop />
         <CartProvider>
           <div className="flex flex-col min-h-screen">
             <Toaster position="top-right" style={{ top: "60px" }} />
