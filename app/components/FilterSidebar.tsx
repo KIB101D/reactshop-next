@@ -72,7 +72,6 @@ export default function FilterSidebar({
         )}
       </div>
 
-      {/* 1. On Sale Toggle */}
       {saleCount > 0 && (
         <div className="pb-5 border-b border-gray-100">
           <label className="flex items-center justify-between cursor-pointer group">
@@ -94,7 +93,7 @@ export default function FilterSidebar({
         </div>
       )}
 
-      {/* 2. Dynamic Categories */}
+      {/* Dynamic Categories */}
       {categories.length > 0 && (
         <div className="pb-5 border-b border-gray-100">
           <h4 className="mb-3 text-xs font-bold tracking-wider text-gray-400 uppercase">
@@ -135,13 +134,12 @@ export default function FilterSidebar({
         </div>
       )}
 
-      {/* 3. Dual Range Slider + Protected Inputs */}
+      {/* Dual Range Slider + Inputs */}
       <div>
         <h4 className="mb-3 text-xs font-bold tracking-wider text-gray-400 uppercase">
           Price Range
         </h4>
 
-        {/* Range Slider Track */}
         <div className="relative w-full h-5 flex items-center mb-4">
           <div className="absolute w-full h-1.5 bg-gray-200 rounded-lg" />
           <div
@@ -152,7 +150,6 @@ export default function FilterSidebar({
             }}
           />
 
-          {/* Range Input MIN */}
           <input
             type="range"
             min={safeMinBound}
@@ -169,7 +166,6 @@ export default function FilterSidebar({
             style={{ zIndex: currentMin > safeMaxBound - 10 ? 5 : 3 }}
           />
 
-          {/* Range Input MAX */}
           <input
             type="range"
             min={safeMinBound}
@@ -187,8 +183,6 @@ export default function FilterSidebar({
           />
         </div>
 
-        {/* Inputs */}
-        {/* Inputs */}
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <span className="absolute text-xs text-gray-400 transform -translate-y-1/2 left-2.5 top-1/2">
@@ -197,7 +191,7 @@ export default function FilterSidebar({
             <input
               type="number"
               min="0"
-              onKeyDown={blockInvalidChar} // <-- Блокуємо математичні оператори
+              onKeyDown={blockInvalidChar}
               placeholder={String(safeMinBound)}
               value={priceRange.min || ""}
               onChange={(e) => {
@@ -215,7 +209,7 @@ export default function FilterSidebar({
             <input
               type="number"
               min="0"
-              onKeyDown={blockInvalidChar} // <-- Блокуємо математичні оператори
+              onKeyDown={blockInvalidChar}
               placeholder={String(safeMaxBound)}
               value={priceRange.max || ""}
               onChange={(e) => {

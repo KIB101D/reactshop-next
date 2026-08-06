@@ -13,13 +13,12 @@ export default function NotFound() {
         Product Not Found
       </h1>
 
-      {/* 3. Description */}
+      {/* Description */}
       <p className="max-w-md text-sm sm:text-base text-gray-500 mb-8 leading-relaxed">
         Sorry, the product you are looking for doesn’t exist, has been removed,
         or is temporarily unavailable.
       </p>
 
-      {/* 4. Action Buttons */}
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <Link
           href="/"

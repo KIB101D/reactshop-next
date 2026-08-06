@@ -11,9 +11,6 @@ import {
 } from "@/app/lib/data/products";
 
 async function HomeContent() {
-  // Для тестування скелетона (видалити setTimeout перед деплоєм)
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   const [categories, flashProducts, featuredProducts] = await Promise.all([
     getCategories(),
     getFlashSaleProducts(),

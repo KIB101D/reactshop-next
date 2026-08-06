@@ -5,9 +5,7 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* 1. Головний баннер (з картинкою + градієнтом bg-grad-hero) */}
       <div className="lg:col-span-2 h-[220px] sm:h-[320px] lg:h-[400px] rounded-3xl relative overflow-hidden flex flex-col justify-end md:justify-center lg:justify-end p-5 sm:p-8">
-        {/* Картинка */}
         <Image
           src="/images/banners/electronics-hero.png"
           alt="Electronics"
@@ -16,10 +14,9 @@ export default function Hero() {
           sizes="(max-width: 1024px) 100vw, 66vw"
           className="object-cover z-0"
         />
-        {/* Градієнтний оверлей поверх картинки */}
+
         <div className="absolute inset-0 bg-grad-hero opacity-45 z-10 pointer-events-none" />
 
-        {/* Текстовий контент */}
         <div className="relative z-20 flex flex-col justify-end md:justify-center lg:justify-end">
           <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-indigo-200 uppercase mb-1 sm:mb-2">
             New season
@@ -39,9 +36,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Бокові баннери */}
       <div className="grid grid-cols-2 gap-3 h-24 sm:h-28 md:h-32 lg:h-[400px] lg:flex lg:flex-col lg:gap-6">
-        {/* 2. Перший боковий (з картинкою + градієнтом bg-grad-side1) */}
         <Link
           href="/category/Clothing"
           className="relative overflow-hidden w-full h-full lg:h-1/2 rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 flex flex-col justify-end group"
@@ -65,7 +60,6 @@ export default function Hero() {
           </div>
         </Link>
 
-        {/* 3. Другий боковий (БЕЗ картинки, чисто bg-grad-side2) */}
         <Link
           href="/"
           className="w-full h-full lg:h-1/2 rounded-2xl lg:rounded-3xl bg-grad-side2 p-3 sm:p-4 lg:p-6 flex flex-col justify-end hover:opacity-95 transition-opacity"

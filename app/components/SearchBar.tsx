@@ -17,7 +17,6 @@ function SearchBar({
 }: SearchBarProps) {
   return (
     <div className="relative flex-1 sm:flex-initial w-full md:max-w-[220px] lg:max-w-[260px] group">
-      {/* Background Glow */}
       <div className="absolute -inset-2 bg-indigo-100/30 rounded-[2.5rem] blur-2xl opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 pointer-events-none" />
 
       <div className="relative flex items-center overflow-hidden rounded-xl border border-gray-200/80 bg-white/50 transition-all duration-300 hover:border-gray-300 group-focus-within:border-gray-400 group-focus-within:bg-white group-focus-within:shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]">

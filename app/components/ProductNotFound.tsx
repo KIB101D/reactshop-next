@@ -12,7 +12,6 @@ export default function ProductNotFound() {
         Product Not Found
       </h1>
 
-      {/* Description */}
       <p className="max-w-md text-sm sm:text-base text-gray-500 mb-8 leading-relaxed">
         Sorry, the product you are looking for doesn’t exist, has been removed,
         or is temporarily unavailable.
