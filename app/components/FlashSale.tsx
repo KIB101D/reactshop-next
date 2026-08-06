@@ -1,24 +1,27 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { FlashProduct } from "../types";
+import { Product } from "../types";
+import { CountdownBadge } from "./CountdownBadge";
 
-export function FlashSale({ products }: { products: FlashProduct[] }) {
+const FLASH_SALE_ENDS_AT = new Date(
+  Date.now() + 4 * 60 * 60 * 1000 + 12 * 60 * 1000 + 33 * 1000,
+).toISOString();
+
+export function FlashSale({ products }: { products: Product[] }) {
   return (
     <section className="p-4 sm:p-8 bg-slate-100 rounded-3xl space-y-4 sm:space-y-6">
       <div className="flex flex-wrap gap-2 justify-between items-center">
         <h2 className="font-heading font-semibold text-gray-800 text-lg sm:text-2xl">
           Flash sale
         </h2>
-        <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-white rounded-full text-xs sm:text-sm font-semibold text-gray-700 shadow-sm">
-          Ends in 04:12:33
-        </span>
+        <CountdownBadge endTime={FLASH_SALE_ENDS_AT} />
       </div>
 
       <div className="grid gap-5 grid-cols-2 md:grid-cols-4">
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/product/${product.id}`}
+            href={`/category/${product.categoryId}/product/${product.id}`}
             className="group space-y-3 p-3 bg-white rounded-2xl hover:shadow-md transition-shadow"
           >
             <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">

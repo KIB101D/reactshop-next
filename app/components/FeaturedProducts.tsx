@@ -10,7 +10,7 @@ export function FeaturedProducts({ products }: { products: Product[] }) {
           Featured products
         </h2>
         <Link
-          href="/products"
+          href="/search"
           className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
         >
           See all

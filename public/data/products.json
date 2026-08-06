@@ -3,21 +3,25 @@
     "id": 1,
     "categoryId": "electronics",
     "title": "Laptop",
-    "price": 1200,
+    "price": 960,
     "image": "/images/products/laptop.png",
     "description": "Powerful laptop for work, gaming and everything in between.",
     "tags": ["tech", "work", "gaming", "portable", "performance"],
-    "rating": 4.6
+    "rating": 4.6,
+    "oldPrice": 1200,
+    "isFlashSale": true
   },
   {
     "id": 2,
     "categoryId": "electronics",
     "title": "Smartphone",
-    "price": 800,
+    "price": 640,
     "image": "/images/products/smartphone.png",
     "description": "Modern smartphone with a great camera and performance.",
     "tags": ["mobile", "daily", "tech", "portable", "smart"],
-    "rating": 4.5
+    "rating": 4.5,
+    "oldPrice": 800,
+    "isFlashSale": true
   },
   {
     "id": 3,
@@ -183,11 +187,13 @@
     "id": 19,
     "categoryId": "games",
     "title": "Soulslike Game",
-    "price": 40,
+    "price": 32,
     "image": "/images/products/actionGame.png",
     "description": "Like Dark Souls, but even your keyboard is trying to kill you. Emotional damage included.",
     "tags": ["game", "hardcore", "souls-like", "dark-fantasy", "singleplayer"],
-    "rating": 4.8
+    "rating": 4.8,
+    "oldPrice": 40,
+    "isFlashSale": true
   },
   {
     "id": 20,
@@ -223,11 +229,13 @@
     "id": 23,
     "categoryId": "electronics",
     "title": "Tablet",
-    "price": 500,
+    "price": 400,
     "image": "/images/products/tablet.png",
     "description": "Portable tablet for work, media and browsing.",
     "tags": ["tech", "portable", "media", "daily"],
-    "rating": 4.4
+    "rating": 4.4,
+    "oldPrice": 500,
+    "isFlashSale": true
   },
   {
     "id": 24,
@@ -259,7 +267,6 @@
     "tags": ["work", "streaming", "camera", "office"],
     "rating": 4.2
   },
-
   {
     "id": 27,
     "categoryId": "clothing",
@@ -300,7 +307,6 @@
     "tags": ["travel", "daily", "storage", "portable"],
     "rating": 4.5
   },
-
   {
     "id": 31,
     "categoryId": "books",
@@ -341,7 +347,6 @@
     "tags": ["fantasy", "fiction", "story", "adventure"],
     "rating": 4.6
   },
-
   {
     "id": 35,
     "categoryId": "furniture",
