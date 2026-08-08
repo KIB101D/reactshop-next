@@ -16,7 +16,7 @@ This isn't a rewrite for the sake of a rewrite — it's a case study in moving a
 
 ## 🌐 Live Demo
 
-👉 [ReactShop](reactshop-next-ochre.vercel.app)
+👉 [ReactShop](https://reactshop-next-ochre.vercel.app/)
 
 Previous Vite version (for comparison): [ReactShop (Vite)](https://vite-react-ecommerce-jet.vercel.app/)
 
