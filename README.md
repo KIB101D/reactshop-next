@@ -55,7 +55,7 @@ Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vi
 | Static, generic `<title>` | Dynamic `generateMetadata()` per page |
 | `<img>` | `next/image` with `priority`/`sizes` |
 
-#### ❗ Problem: client-rendered shell
+### ❗ Problem: client-rendered shell
 
 The Vite SPA shipped an essentially empty <body>:
 
@@ -70,7 +70,7 @@ There's the issue: product data, categories, prices, and headings only existed a
 
 Google does render JavaScript, but on a separate, delayed render queue — indexing can lag days or weeks behind raw HTML, which gets indexed immediately. Link-preview crawlers don't render JS at all: Open Graph scrapers for Slack, Twitter, and Facebook read raw HTML only, so a product link pasted into a chat would show a blank preview. And Google's JS rendering isn't the baseline either — Bing, DuckDuckGo, and others have weaker or no JS rendering support.
 
-#### ✅ Solution: Server Components render the initial HTML
+### ✅ Solution: Server Components render the initial HTML
 
 ```
 Request → Server Component → read data → render HTML → browser gets real content → hydrate interactive parts
@@ -90,7 +90,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
 💡 Because this runs on the server before the response is sent, the crawler and the OG scraper both receive the same fully-formed HTML the browser does — there's no JS execution step for them to skip.
 
-#### 🧩 Server + Client on the same URL
+### 🧩 Server + Client on the same URL
 
 SEO doesn't require giving up interactivity. Every route that needs both is split into a thin server `page.tsx` (data + metadata) and a `*Client.tsx` (interactive slice):
 
@@ -125,7 +125,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 </p>
 
 
-#### 🛣️ Routing
+### 🛣️ Routing
 
 React Router's `/category/:categoryId/product/:productId` became file-system routing: `app/(site)/category/[categoryId]/product/[productId]/page.tsx`. Dynamic segments live in the folder structure instead of a central router config.
 
