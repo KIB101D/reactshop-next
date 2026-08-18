@@ -57,7 +57,7 @@ Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vi
 
 #### ❗ Problem: client-rendered shell
 
-The Vite SPA shipped essentially an empty document:
+The Vite SPA shipped an essentially empty <body>:
 
 ```html
 <body>
@@ -66,7 +66,9 @@ The Vite SPA shipped essentially an empty document:
 </body>
 ```
 
-Product data, categories, prices, and headings only existed after JS loaded, fetched `products.json`, and React rendered. For a storefront, that's the exact content people search for and the exact content that should be in the initial response — not assembled client-side after the fact.
+There's the issue: product data, categories, prices, and headings only existed after JS loaded.
+
+Google does render JavaScript, but on a separate, delayed render queue — indexing can lag days or weeks behind raw HTML, which gets indexed immediately. Link-preview crawlers don't render JS at all: Open Graph scrapers for Slack, Twitter, and Facebook read raw HTML only, so a product link pasted into a chat would show a blank preview. And Google's JS rendering isn't the baseline either — Bing, DuckDuckGo, and others have weaker or no JS rendering support.
 
 #### ✅ Solution: Server Components render the initial HTML
 
@@ -74,15 +76,19 @@ Product data, categories, prices, and headings only existed after JS loaded, fet
 Request → Server Component → read data → render HTML → browser gets real content → hydrate interactive parts
 ```
 
-Data access became plain async functions called directly inside `page.tsx`/`layout.tsx` — [`app/lib/data/products.ts`](https://github.com/KIB101D/reactshop-next/blob/main/app/lib/data/products.ts):
+Called directly inside the page component — no "use client", no useEffect in sight — [page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
 
 ```ts
-export async function getProducts(): Promise<Product[]> {
-  const filePath = path.join(process.cwd(), "public/data/products.json");
-  const file = await readFile(filePath, "utf-8");
-  return JSON.parse(file);
+// No "use client", so this is a Server Component by default
+export default async function CategoryPage({ params }: PageProps) {
+  const { categoryId } = await params;
+  const products = await getProducts();
+
+  return <CategoryClient products={products} categoryId={categoryId} />;
 }
 ```
+
+💡 Because this runs on the server before the response is sent, the crawler and the OG scraper both receive the same fully-formed HTML the browser does — there's no JS execution step for them to skip.
 
 #### 🧩 Server + Client on the same URL
 
@@ -94,7 +100,7 @@ category/[categoryId]/product/[productId]/
 └── ProductDetailsClient.tsx  # Client: add to cart, gallery, quantity
 ```
 
-[`app/(site)/category/[categoryId]/product/[productId]/page.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx):
+[Product Page:](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx):
 
 ```ts
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -113,7 +119,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 ```
 
-<!-- ⚠️ : a screenshot of a shared product link's Open Graph preview (e.g. pasted into Slack/Twitter card validator), or a View Source screenshot showing the populated <title>/<meta>. This is the one place a screenshot would prove the SEO claim instead of asserting it. -->
+👉 Result:
+<p align="center">
+  <img src="./screenshots/openGraphSocials.png" width="90%" />
+</p>
+
 
 #### 🛣️ Routing
 
