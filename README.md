@@ -90,6 +90,8 @@ export default async function CategoryPage({ params }: PageProps) {
 
 💡 Because this runs on the server before the response is sent, the crawler and the OG scraper both receive the same fully-formed HTML the browser does — there's no JS execution step for them to skip.
 
+---
+
 ### 🧩 Server + Client on the same URL
 
 SEO doesn't require giving up interactivity. Every route that needs both is split into a thin server `page.tsx` (data + metadata) and a `*Client.tsx` (interactive slice):
@@ -124,6 +126,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   <img src="./screenshots/openGraphSocials.png" width="90%" />
 </p>
 
+---
 
 ### 🛣️ Routing
 
@@ -166,7 +169,7 @@ URL query → server page.tsx → filterProducts() → filtered set → SearchCl
 
 <!-- ⚠️ a gif of the filter sidebar in action — category checkbox toggling the grid, the price slider narrowing results, the mobile slide-over drawer. This is the single biggest feature with zero visual proof right now. -->
 
-#### ⚡ `useMemo` — what it actually buys you
+#### ⚡ `useMemo` 
 
 ```ts
 const facets = useMemo(() => { /* categories, price bounds, sale count */ }, [filtered]);
