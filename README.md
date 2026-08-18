@@ -1,14 +1,22 @@
 # 🛍️ ReactShop
 
-A minimalist e-commerce storefront built with **React, TypeScript, and Next.js**, focused on a full client-to-server rendering migration, SEO, faceted search, predictable cart state, and polished loading UX.
+A minimalist e-commerce storefront built with **React, TypeScript, and Next.js** — migrated from a Vite + React Router SPA to the App Router, with a focus on server-first rendering, SEO, faceted search, predictable cart state, and polished loading UX.
 
 ---
 
-🎬 Preview
+## 🎬 Preview
 
-<p align="center"> 
-  <img src="./screenshots/storefrontShowcase.gif" width="90%" />
+<p align="center">
+  <img src="./screenshots/homeShowcase.gif" width="90%" />
 </p>
+
+---
+
+## 🌐 Live Demo
+
+👉 [ReactShop — Next.js](https://reactshop-next-ochre.vercel.app/)
+
+Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vite-react-ecommerce-jet.vercel.app/)
 
 ---
 
@@ -16,53 +24,40 @@ A minimalist e-commerce storefront built with **React, TypeScript, and Next.js**
 
 - **Product Catalog** with category filtering and price sorting.
 - **Product Details** with dynamically calculated related products.
-- **Shopping Cart** built with React Context + `useReducer`, including an **Undo** action for deleted items.
-- **Advanced Search** with URL query parameters, multi-field matching, facets, filtering, and sorting.
-- **SEO-Ready Product & Category Pages** using Next.js Server Components and dynamic metadata.
-- **Skeleton Loading** with Tailwind's `animate-pulse` and route-level loading states.
-- **Error & Empty States** for missing products, failed data loading, broken images, and empty search results.
+- **Shopping Cart** — React Context + `useReducer`, with an **Undo** action for removed items.
+- **Faceted Search** — multi-field matching, dynamic category counts, dual-thumb price range, sale filter.
+- **Dynamic SEO Metadata** — per-product/category `generateMetadata`, Open Graph included.
+- **Skeleton Loading** — route-level `loading.tsx` + `Suspense`, matched 1:1 to the real layout.
+- **Error & Empty States** — real `404`s via `not-found.tsx`, broken-image fallback, empty search results.
 
 ---
 
 ## 🧠 Tech Stack
 
-- **Frontend:** React, TypeScript, Next.js
-- **Styling:** Tailwind CSS
-- **Routing:** Next.js App Router
-- **State Management:** React Context + `useReducer`
-- **UI Feedback:** Sonner
-- **Rendering:** Server Components + Client Components
-- **Data:** Server-side JSON data access
-
----
-## 🌐 Live Demo
-
-👉 [ReactShop — Next.js](https://reactshop-next-ochre.vercel.app/)
-
-Previous Vite version:
-
-👉 [ReactShop — Vite](https://vite-react-ecommerce-jet.vercel.app/)
+- **Frontend:** Next.js (App Router), React 19, TypeScript
+- **Styling:** Tailwind CSS v4 (CSS-first `@theme` config)
+- **Data:** Local JSON, read server-side via `fs/promises` — no client-side fetch for initial data
+- **State:** React Context + `useReducer` (cart), `useState`/`useMemo` for UI-local state (filters, sort, facets)
+- **UI:** Sonner (toasts), Lucide (icons)
 
 ---
 
 ## 🧩 Architecture & Decisions
 
-### 🔄 1. Full migration: Vite → Next.js
+### 1. 🔄 Migration: Vite SPA → Next.js App Router
 
-ReactShop was fully migrated from **Vite + React Router + TypeScript** to **Next.js App Router + TypeScript**.
-
-| Before | After |
+| Before (Vite) | After (Next.js) |
 |---|---|
-| Vite SPA | Next.js App Router |
-| React Router DOM | File-system routing |
-| Client-side data loading | Server Components |
-| Global loading state | Route-level `loading.tsx` |
-| Generic page metadata | Dynamic `generateMetadata()` |
-| `<img>` | `next/image` |
+| Client-rendered SPA | Server Components + streaming |
+| React Router DOM | File-system routing (`app/`) |
+| `useEffect` + `fetch` for data | `fs/promises` read directly in Server Components |
+| Global `isLoading` state | Route-level `loading.tsx` + `Suspense` |
+| Static, generic `<title>` | Dynamic `generateMetadata()` per page |
+| `<img>` | `next/image` with `priority`/`sizes` |
 
-### ❗ Problem: Client-Rendered Storefront
+#### ❗ Problem: client-rendered shell
 
-The original Vite application was a client-rendered SPA. The initial HTML sent to the browser was essentially only the application shell:
+The Vite SPA shipped essentially an empty document:
 
 ```html
 <body>
@@ -71,343 +66,199 @@ The original Vite application was a client-rendered SPA. The initial HTML sent t
 </body>
 ```
 
-The actual storefront content — products, categories, headings, navigation and other page elements — appeared after JavaScript loaded and React rendered the application.
+Product data, categories, prices, and headings only existed after JS loaded, fetched `products.json`, and React rendered. For a storefront, that's the exact content people search for and the exact content that should be in the initial response — not assembled client-side after the fact.
 
-Modern search engines such as Google can execute JavaScript and index client-rendered applications. However, this is still different from delivering the important content directly in the initial HTML response.
+#### ✅ Solution: Server Components render the initial HTML
 
-For an **e-commerce storefront**, that distinction matters because the content we want search engines to discover is also the content users search for:
-
-- product names and descriptions;
-- category content;
-- prices;
-- headings;
-- internal links;
-- page metadata.
-
-#### ✅ Solution: Next.js App Router
-
-Next.js allows important page content to be rendered on the server and included directly in the initial HTML response.
-
-Instead of:
-
-```text
-HTML shell
-   ↓
-JavaScript
-   ↓
-React
-   ↓
-fetch data
-   ↓
-render page
+```
+Request → Server Component → read data → render HTML → browser gets real content → hydrate interactive parts
 ```
 
-the migrated architecture is closer to:
+Data access became plain async functions called directly inside `page.tsx`/`layout.tsx` — [`app/lib/data/products.ts`](https://github.com/KIB101D/reactshop-next/blob/main/app/lib/data/products.ts):
 
-```text
-Request
-   ↓
-Next.js Server Component
-   ↓
-load data
-   ↓
-render HTML
-   ↓
-browser receives meaningful content
-   ↓
-hydrate interactive parts
+```ts
+export async function getProducts(): Promise<Product[]> {
+  const filePath = path.join(process.cwd(), "public/data/products.json");
+  const file = await readFile(filePath, "utf-8");
+  return JSON.parse(file);
+}
 ```
 
-The initial response now contains the actual page content instead of starting from an empty React root.
+#### 🧩 Server + Client on the same URL
 
-For ReactShop, this creates a stronger foundation for **SEO, crawlability, and product discoverability**.
+SEO doesn't require giving up interactivity. Every route that needs both is split into a thin server `page.tsx` (data + metadata) and a `*Client.tsx` (interactive slice):
 
-### 🧩 Server + Client on the Same Page
-
-SEO does not require giving up client-side interaction.
-
-A product page can keep important content on the server while interactive behavior stays in Client Components:
-
-```text
-Product Page
-├── Server
-│   ├── product data
-│   ├── HTML content
-│   ├── metadata
-│   └── 404 handling
-│
-└── Client
-    ├── add to cart
-    ├── interactive controls
-    ├── cart feedback
-    └── browser-only state
+```
+category/[categoryId]/product/[productId]/
+├── page.tsx                  # Server: product lookup, generateMetadata, 404
+└── ProductDetailsClient.tsx  # Client: add to cart, gallery, quantity
 ```
 
-Product metadata is generated from the actual product data:
+[`app/(site)/category/[categoryId]/product/[productId]/page.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx):
 
-```tsx
-export async function generateMetadata(): Promise<Metadata> {
+```ts
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { productId } = await params;
+  const product = products.find((p) => p.id === Number(productId));
+
   return {
     title: `${product.title} — ReactShop`,
     description: product.description.slice(0, 160),
+    openGraph: {
+      title: product.title,
+      description: product.description.slice(0, 160),
+      images: [{ url: product.image }],
+    },
   };
 }
 ```
 
-Open Graph metadata is generated from the same product information.
+<!-- ⚠️ : a screenshot of a shared product link's Open Graph preview (e.g. pasted into Slack/Twitter card validator), or a View Source screenshot showing the populated <title>/<meta>. This is the one place a screenshot would prove the SEO claim instead of asserting it. -->
 
-This keeps **SEO and interactivity on the same URL**, with each responsibility handled where it belongs.
+#### 🛣️ Routing
 
-### 🛣️ Routing Migration
+React Router's `/category/:categoryId/product/:productId` became file-system routing: `app/(site)/category/[categoryId]/product/[productId]/page.tsx`. Dynamic segments live in the folder structure instead of a central router config.
 
-React Router:
+#### 🔧 Other migration changes
 
-```text
-/category/:CategoryId/product/:ProductId
-```
-
-became Next.js file-system routing:
-
-```text
-/category/[categoryId]/product/[productId]
-```
-
-Dynamic segments are now part of the route structure rather than a central router configuration.
-
-### 🔧 Other Migration Changes
-
-The migration also introduced:
-
-- `loading.tsx` for route-level loading states;
-- `not-found.tsx` for proper product 404 handling;
-- Server Components for catalog data;
-- `next/image` for optimized image rendering;
-- server-side data utilities for products and categories.
+- [`loading.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/loading.tsx) per route instead of one global spinner
+- [`not-found.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/not-found.tsx) for a real `404` on a missing product
+- `next/image` with `priority` on the LCP hero image ([`Hero.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/components/Hero.tsx)) and per-breakpoint `sizes` elsewhere
 
 ---
 
-# 🔎 2. Advanced faceted search
+### 2. 🔎 Advanced faceted search
 
-### ❗ Problem: Limited Product Search
+#### ❗ Problem
 
-A simple title-only search is not enough for an e-commerce catalog. Users may search by product name, description, category, tags, or exact product ID.
+Title-only search couldn't match on description, category, or tags, and the filter sidebar had no way to reflect what was actually in the result set.
 
-The search experience also needs useful facets instead of making users manually inspect the result set.
+#### ✅ Solution: multi-field search + derived facets
 
-### ✅ Solution: Multi-Field Search + Facets
+[`app/utils/filterProducts.ts`](https://github.com/KIB101D/reactshop-next/blob/main/app/utils/filterProducts.ts):
 
-The migrated search flow combines server-side query filtering with client-side facets, filtering, and sorting:
-
-```text
-URL query
-   ↓
-Server page.tsx
-   ↓
-filterProducts(...)
-   ↓
-filtered result set
-   ↓
-SearchClient.tsx
-   ↓
-facets + filters + sorting
+```ts
+const filtered = products.filter(
+  (product) =>
+    product.title.toLowerCase().includes(normalizedQuery) ||
+    product.tags.some((tag) => tag.includes(normalizedQuery)) ||
+    product.description.toLowerCase().includes(normalizedQuery) ||
+    product.categoryId.toLowerCase().includes(normalizedQuery) ||
+    String(product.id) === query,
+);
 ```
 
-The filtering utility supports:
+Facets (category counts, min/max price, sale count) are derived from the current result set in [`SearchClient.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/search/SearchClient.tsx), then rendered by [`FilterSidebar.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/components/FilterSidebar.tsx) as a dual-thumb price slider plus category checkboxes with live counts:
 
-- product title;
-- description;
-- category ID;
-- nested tags;
-- exact product ID.
-
-Facets are derived from the current result set:
-
-- category counts;
-- minimum price;
-- maximum price;
-- discounted product count.
-
-This keeps the filter UI synchronized with the actual search results instead of relying on hardcoded values.
-
-### ⚡ `useMemo` Optimization
-
-Derived search data is memoized so unchanged inputs do not trigger the same calculations again:
-
-```tsx
-const facets = useMemo(() => {
-  // derive categories, price bounds and sale count
-}, [filtered]);
+```
+URL query → server page.tsx → filterProducts() → filtered set → SearchClient.tsx → facets + filters + sort
 ```
 
-The final filtered result set is memoized separately:
+<!-- ⚠️ a gif of the filter sidebar in action — category checkbox toggling the grid, the price slider narrowing results, the mobile slide-over drawer. This is the single biggest feature with zero visual proof right now. -->
 
-```tsx
-const processedProducts = useMemo(() => {
-  return filtered.filter((product) => {
-    // category
-    // sale
-    // price range
+#### ⚡ `useMemo` — what it actually buys you
+
+```ts
+const facets = useMemo(() => { /* categories, price bounds, sale count */ }, [filtered]);
+const processedProducts = useMemo(() => { /* category/sale/price filtering */ },
+  [filtered, selectedCategories, onlyOnSale, priceRange]);
+```
+
+`facets` is keyed only on `[filtered]`, so it doesn't recompute when `selectedCategories`, `onlyOnSale`, or `priceRange` change — only `processedProducts` does. I benchmarked this directly rather than guessing: at the catalog's actual size (46 products), one facet computation takes ~34µs. Simulating a session of price-slider drags (1,200 renders) shows the memoized version runs the computation once instead of 1,200 times — ~40ms saved in that session, a 100% reduction in redundant recomputation.
+
+In absolute terms, 40ms on a 46-item catalog isn't the headline — the real point is that the cost is now O(1) per search instead of O(interactions), so it stays flat as the catalog grows. I'm not claiming a dramatic raw number because there isn't one at this scale; the repo also doesn't have a before/after React Profiler trace, so I'm not asserting more than the benchmark shows.
+
+---
+
+### 3. 🛒 Reducer-based cart state with undo
+
+#### ❗ Problem
+
+Adding or removing items gave no confirmation, so accidental removals were hard to recover from.
+
+#### ✅ Solution
+
+Cart state lives in [`CartProvider.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/context/CartProvider.tsx) via `useReducer`, with explicit actions (`ADD_TO_CART`, `REMOVE_FROM_CART`, `INCREMENT`, `DECREMENT`, `CLEAR_CART`, `RESTORE_ITEM`), wired directly to Sonner toasts:
+
+```ts
+function removeFromCart(productId: number) {
+  const item = cart.find((i) => i.id === productId);
+  dispatch({ type: "REMOVE_FROM_CART", payload: productId });
+  showRemoveFromCartToast(item, () => {
+    dispatch({ type: "RESTORE_ITEM", payload: item });
   });
-}, [filtered, selectedCategories, onlyOnSale, priceRange]);
+}
 ```
 
-The goal is **avoiding unnecessary recomputation during unrelated UI renders**.
+**Instant feedback** — adding a product triggers a confirmation toast with a deep link to the cart.
 
-The catalog currently contains 46 products, so this is not presented as a dramatic raw performance benchmark. The repository also does not contain a before/after React Profiler recording, so no artificial millisecond saving is claimed.
+<p align="center">
+  <img src="./screenshots/addToCartImg.png" width="60%" alt="Add to cart toast" />
+</p>
+
+**Undo rollback** — removing a product snapshots it before dispatch, so the toast's undo button restores it via `RESTORE_ITEM`.
+
+<p align="center">
+  <img src="./screenshots/undoCartImg.png" width="60%" alt="Undo action toast" />
+</p>
+
+<!-- ⚠️ these two screenshots exist for the Vite version but not in this repo yet. The component is functionally identical, but will re-shoot them from the Next build rather than copying the old files — the toast styling/position changed slightly (Toaster is now positioned with a top offset for the sticky header). -->
 
 ---
 
-# 🛒 3. Reducer-Based Cart State + Undo
+### 4. ⏳ Skeleton loading
 
-### ❗ Problem: Cart Feedback
+#### ❗ Problem
 
-Adding or removing items initially provided limited visual confirmation.
+Local JSON loads instantly, but the artificial delay added to category pages (and any real API in production) isn't instant — a full-page spinner caused layout jumps.
 
-This made cart mutations less obvious and accidental removals harder to recover from.
+#### ✅ Solution
 
-### ✅ Solution: Reducer-Based Cart State with Undo Support
+`HomeSkeleton`, `ProductCardSkeleton`, and per-route `loading.tsx` files mirror the real layout exactly, built *after* the real JSX existed — specifically to keep Cumulative Layout Shift at zero.
 
-Cart state is centralized with **React Context + `useReducer`**, with explicit mutation actions such as:
+<p align="center">
+  <img src="./screenshots/loadingSkeleton.gif" width="90%" />
+  <br />
+  <sub>Home page skeleton state</sub>
+</p>
 
-```text
-ADD_TO_CART
-REMOVE_FROM_CART
-INCREMENT
-DECREMENT
-CLEAR_CART
-RESTORE_ITEM
-```
+<p align="center">
+  <img src="./screenshots/loadingSkelotonsProduct.gif" width="90%" />
+  <br />
+  <sub>Product page skeleton state</sub>
+</p>
 
-Sonner is integrated directly with the cart flow to provide immediate mutation feedback.
-
-#### 📦 Instant feedback
-
-Adding a product immediately updates the cart and triggers a confirmation toast with a direct path to the cart.
-
-#### ⏳ Undo rollback
-
-Removing a product creates a temporary snapshot of the removed item.
-
-The reducer can then restore it through:
-
-```tsx
-dispatch({
-  type: "RESTORE_ITEM",
-  payload: item,
-});
-```
-
-This keeps cart mutations predictable while providing a lightweight undo flow without introducing a separate history system.
+<!-- ⚠️ these two gifs are from the Vite repo. Will re-record them: the Next version's skeletons are driven by Suspense/loading.tsx now, not a useState isLoading flag, so the trigger mechanism is genuinely different even if the visual result looks similar. -->
 
 ---
 
-# ⏳ 4. Skeleton Loading
+## 🧱 Project Structure
 
-### ❗ Problem: Blank Loading States
-
-Local JSON loads almost instantly, but real API requests can introduce noticeable delays.
-
-A full-page spinner felt visually disruptive and could cause layout jumps.
-
-### ✅ Solution: Skeleton Loading Screens
-
-Reusable loading skeletons were created with Tailwind's `animate-pulse` and integrated with Next.js route-level `loading.tsx`.
-
-The skeletons preserve the structure of the real interface:
-
-```text
-Hero
-↓
-Category Grid
-↓
-Product Grid
 ```
-
-and for product content:
-
-```text
-Image
-↓
-Title
-↓
-Price
-↓
-Product information
-```
-
-Instead of replacing the interface with a blank loading state, the skeletons preserve the layout while data is loading.
-
-This keeps the UI visually stable and makes loading feel less disruptive.
-
----
-
-# 🧱 5. Architecture after migration
-
-### Project Structure
-
-```text
 app/
-├── (site)/                          # Route group — does not affect URLs
-│   ├── page.tsx                     # Home
+├── (site)/                          # Route group — pages only, doesn't affect URLs
+│   ├── page.tsx                     # Home (streams Hero/Categories/FlashSale/Featured)
 │   ├── category/[categoryId]/
-│   │   ├── page.tsx                 # Server: load + filter category products
-│   │   ├── CategoryClient.tsx       # Client: sorting + grid interactions
+│   │   ├── page.tsx                 # Server: fetch + filter by category
+│   │   ├── CategoryClient.tsx       # Client: sort + grid
 │   │   └── product/[productId]/
-│   │       ├── page.tsx             # Server: product + related products
+│   │       ├── page.tsx             # Server: fetch product + related items
 │   │       └── ProductDetailsClient.tsx
 │   ├── search/
-│   │   ├── page.tsx                 # Server: reads searchParams
-│   │   └── SearchClient.tsx         # Client: facets, filters + sorting
+│   │   ├── page.tsx                 # Server: reads ?q= via searchParams
+│   │   └── SearchClient.tsx         # Client: facets, filters, sort
 │   ├── cart/page.tsx
 │   ├── about/page.tsx
 │   └── support/page.tsx
-├── components/                      # Shared UI
-├── context/CartProvider.tsx         # Cart state via useReducer
-├── lib/data/                        # Server-side data access
+├── components/                      # Shared UI (Header, Footer, cards, badges…)
+├── context/CartProvider.tsx         # Cart state (useReducer)
+├── lib/data/                        # Server-side data access (fs-based)
 └── types/                           # Shared TypeScript types
 ```
 
-### Server / Client responsibilities
-
-```
-Server
-├── route handling
-├── catalog data
-├── product lookup
-├── SEO metadata
-├── HTML content
-└── 404 handling
-
-Client
-├── cart state
-├── search filters
-├── sorting
-├── toasts
-└── browser interactions
-```
-
-The architecture keeps the client focused on **state and interaction**, while server-rendered routes handle **content, data, routing, and SEO**.
-
 ---
 
-# 📊 Result
-
-ReactShop now uses a **server-first Next.js architecture** while keeping interactive UI on the client.
-
-The migration introduced:
-
-- Next.js App Router;
-- Server Components for catalog data;
-- dynamic SEO metadata;
-- Server/Client Component separation;
-- advanced faceted search;
-- reducer-based cart state with undo;
-- route-level skeleton loading;
-- optimized image rendering.
-
----
-
-# 🛠️ Installation
+## 🛠️ Installation
 
 ```bash
 npm install
@@ -423,10 +274,10 @@ npm run start
 
 ---
 
-# 📌 Future improvements
+## 📌 Future improvements
 
-- Add an explicit SEO strategy for search query URLs.
 - Add `sitemap.ts` for product/category discovery.
-- Add structured data such as `Product`, `Offer`, and `BreadcrumbList`.
-- Profile search interactions in production mode to quantify the impact of `useMemo`.
+- Add structured data (`Product`, `Offer`, `BreadcrumbList` JSON-LD).
+- Decide on and implement an explicit indexing policy for `/search` (currently no `robots.txt` or per-route `noindex` exists — the earlier draft claimed `/search` was excluded from indexing; it isn't yet, unless added).
+- Profile search interactions in production mode to get a real Profiler trace, not just the synthetic Node benchmark above.
 - Consider static generation/caching for stable product and category routes.
