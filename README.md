@@ -72,12 +72,13 @@ Google does render JavaScript, but on a separate, delayed render queue — index
 
 #### ✅ Solution: Server Components render the initial HTML
 
+Called directly inside the page component — no "use client", no useEffect in sight 
+
 ```
 Request → Server Component → read data → render HTML → browser gets real content 👈 
 ```
 
-Called directly inside the page component — no "use client", no useEffect in sight — [page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
-
+[page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
 ```ts
 // No "use client", so this is a Server Component by default
 export default async function CategoryPage({ params }: PageProps) {
@@ -87,6 +88,7 @@ export default async function CategoryPage({ params }: PageProps) {
   return <CategoryClient products={products} categoryId={categoryId} />;
 }
 ```
+
 
 💡 Because this runs on the server before the response is sent, the crawler and the OG scraper both receive the same fully-formed HTML the browser does — there's no JS execution step for them to skip.
 
@@ -98,27 +100,8 @@ SEO doesn't require giving up interactivity. Every route that needs both is spli
 
 ```
 category/[categoryId]/product/[productId]/
-├── page.tsx                  # Server: product lookup, generateMetadata, 404
+├── [page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx)                # Server: product lookup, generateMetadata, 404
 └── ProductDetailsClient.tsx  # Client: add to cart, gallery, quantity
-```
-
-[Product Page:](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx):
-
-```ts
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { productId } = await params;
-  const product = products.find((p) => p.id === Number(productId));
-
-  return {
-    title: `${product.title} — ReactShop`,
-    description: product.description.slice(0, 160),
-    openGraph: {
-      title: product.title,
-      description: product.description.slice(0, 160),
-      images: [{ url: product.image }],
-    },
-  };
-}
 ```
 
 👉 Result:
@@ -140,9 +123,7 @@ React Router's `/category/:categoryId/product/:productId` became file-system rou
 
 ---
 
-### 🔎 Advanced Faceted Search
-
-#### ❗ Problem: Limited Search Feedback
+### ❗ Problem: Limited Search Feedback & Discovery
 
 The original search could find products, but gave users limited feedback and control over the result set.
 
