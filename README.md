@@ -96,9 +96,10 @@ export default async function CategoryPage({ params }: PageProps) {
 
 SEO doesn't require giving up interactivity. Every route that needs both is split into a thin server `page.tsx` (data + metadata) and a `*Client.tsx` (interactive slice):
 
+[Product page implementation:](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx):
 ```
 category/[categoryId]/product/[productId]/
-├── [page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx)                # Server: product lookup, generateMetadata, 404
+├── page.tsx  # Server: product lookup, generateMetadata, 404
 └── ProductDetailsClient.tsx  # Client: add to cart, gallery, quantity
 ```
 
