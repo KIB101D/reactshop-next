@@ -73,7 +73,7 @@ Google does render JavaScript, but on a separate, delayed render queue — index
 #### ✅ Solution: Server Components render the initial HTML
 
 ```
-Request → Server Component → read data → render HTML → browser gets real content → hydrate interactive parts
+Request → Server Component → read data → render HTML → browser gets real content 👈 
 ```
 
 Called directly inside the page component — no "use client", no useEffect in sight — [page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
