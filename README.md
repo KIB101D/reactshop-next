@@ -68,19 +68,19 @@ The Vite SPA shipped an essentially empty <body>:
 
 There's the issue: product data, categories, prices, and headings only existed after JS loaded.
 
-Google does render JavaScript, but on a separate, delayed render queue — indexing can lag days or weeks behind raw HTML, which gets indexed immediately. Link-preview crawlers don't render JS at all: Open Graph scrapers for Slack, Twitter, and Facebook read raw HTML only, so a product link pasted into a chat would show a blank preview. And Google's JS rendering isn't the baseline either — Bing, DuckDuckGo, and others have weaker or no JS rendering support.
+Google does render JavaScript, but raw HTML is still the first response received by crawlers.[^1] Link-preview crawlers generally rely on the HTML response for Open Graph metadata.[^2]
+
+[^1]: Google Search can render JavaScript, but crawling, rendering, and indexing are separate stages.
+[^2]: Social/link-preview crawlers typically consume Open Graph metadata from the page HTML.
 
 #### ✅ Solution: Server Components render the initial HTML
 
-Called directly inside the page component — no "use client", no useEffect in sight 
-
 ```
-Request → Server Component → read data → render HTML → browser gets real content 👈 
+Request → Server Component → read data → render HTML → browser gets real content 
 ```
 
-[page.tsx](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
+[Server page:](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
 ```ts
-// No "use client", so this is a Server Component by default
 export default async function CategoryPage({ params }: PageProps) {
   const { categoryId } = await params;
   const products = await getProducts();
@@ -88,7 +88,6 @@ export default async function CategoryPage({ params }: PageProps) {
   return <CategoryClient products={products} categoryId={categoryId} />;
 }
 ```
-
 
 💡 Because this runs on the server before the response is sent, the crawler and the OG scraper both receive the same fully-formed HTML the browser does — there's no JS execution step for them to skip.
 
