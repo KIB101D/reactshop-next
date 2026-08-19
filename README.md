@@ -44,7 +44,7 @@ Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vi
 
 ## 🧩 Architecture & Decisions
 
-### 1. 🔄 Migration: Vite SPA → Next.js App Router
+### 🔄 Migration: Vite SPA → Next.js App Router
 
 | Before (Vite) | After (Next.js) |
 |---|---|
@@ -55,7 +55,7 @@ Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vi
 | Static, generic `<title>` | Dynamic `generateMetadata()` per page |
 | `<img>` | `next/image` with `priority`/`sizes` |
 
-### ❗ Problem: client-rendered shell
+#### ❗ Problem: client-rendered shell
 
 The Vite SPA shipped an essentially empty <body>:
 
@@ -70,7 +70,7 @@ There's the issue: product data, categories, prices, and headings only existed a
 
 Google does render JavaScript, but on a separate, delayed render queue — indexing can lag days or weeks behind raw HTML, which gets indexed immediately. Link-preview crawlers don't render JS at all: Open Graph scrapers for Slack, Twitter, and Facebook read raw HTML only, so a product link pasted into a chat would show a blank preview. And Google's JS rendering isn't the baseline either — Bing, DuckDuckGo, and others have weaker or no JS rendering support.
 
-### ✅ Solution: Server Components render the initial HTML
+#### ✅ Solution: Server Components render the initial HTML
 
 ```
 Request → Server Component → read data → render HTML → browser gets real content → hydrate interactive parts
@@ -92,7 +92,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
 ---
 
-### 🧩 Server + Client on the same URL
+#### 🧩 Server + Client on the same URL
 
 SEO doesn't require giving up interactivity. Every route that needs both is split into a thin server `page.tsx` (data + metadata) and a `*Client.tsx` (interactive slice):
 
@@ -128,7 +128,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 ---
 
-### 🛣️ Routing
+#### 🛣️ Routing
 
 React Router's `/category/:categoryId/product/:productId` became file-system routing: `app/(site)/category/[categoryId]/product/[productId]/page.tsx`. Dynamic segments live in the folder structure instead of a central router config.
 
@@ -140,15 +140,54 @@ React Router's `/category/:categoryId/product/:productId` became file-system rou
 
 ---
 
-### 2. 🔎 Advanced faceted search
+### 🔎 Advanced Faceted Search
 
-#### ❗ Problem
+#### ❗ Problem: Limited Search Feedback
 
-Title-only search couldn't match on description, category, or tags, and the filter sidebar had no way to reflect what was actually in the result set.
+The original search could find products, but gave users limited feedback and control over the result set.
 
-#### ✅ Solution: multi-field search + derived facets
+A query returned matching products, but the interface did not show:
 
-[`app/utils/filterProducts.ts`](https://github.com/KIB101D/reactshop-next/blob/main/app/utils/filterProducts.ts):
+* how results were distributed across categories;
+* what price range was available;
+* how many products were on sale;
+* which filters were relevant to the current results.
+
+---
+
+#### ✅ Solution: Dynamic Faceted Search
+
+The search experience was redesigned around the **current result set**.
+
+The pipeline is intentionally split into three stages:
+
+```text
+1. getProducts()
+   ↓
+   All products
+
+2. filterProductsByQuery(query)
+   ↓
+   searchedProducts — products matching the query
+   │
+   └──→ computeFacets(searchedProducts)
+             ↓
+             available categories
+             min/max price
+             sale count
+
+3. filterBySelectedOptions(selectedFilters)
+   ↓
+   finalProducts — rendered product grid
+```
+
+Facets are derived from `searchedProducts`, so the available categories, price range, and sale count always reflect the current search results rather than the full catalog.
+
+---
+
+#### ⚡ Multi-Field Search
+
+The query matches multiple product fields:
 
 ```ts
 const filtered = products.filter(
@@ -161,61 +200,53 @@ const filtered = products.filter(
 );
 ```
 
-Facets (category counts, min/max price, sale count) are derived from the current result set in [`SearchClient.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/search/SearchClient.tsx), then rendered by [`FilterSidebar.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/components/FilterSidebar.tsx) as a dual-thumb price slider plus category checkboxes with live counts:
-
-```
-URL query → server page.tsx → filterProducts() → filtered set → SearchClient.tsx → facets + filters + sort
-```
-
-<!-- ⚠️ a gif of the filter sidebar in action — category checkbox toggling the grid, the price slider narrowing results, the mobile slide-over drawer. This is the single biggest feature with zero visual proof right now. -->
-
-#### ⚡ `useMemo` 
-
-```ts
-const facets = useMemo(() => { /* categories, price bounds, sale count */ }, [filtered]);
-const processedProducts = useMemo(() => { /* category/sale/price filtering */ },
-  [filtered, selectedCategories, onlyOnSale, priceRange]);
-```
-
-`facets` is keyed only on `[filtered]`, so it doesn't recompute when `selectedCategories`, `onlyOnSale`, or `priceRange` change — only `processedProducts` does. I benchmarked this directly rather than guessing: at the catalog's actual size (46 products), one facet computation takes ~34µs. Simulating a session of price-slider drags (1,200 renders) shows the memoized version runs the computation once instead of 1,200 times — ~40ms saved in that session, a 100% reduction in redundant recomputation.
-
-In absolute terms, 40ms on a 46-item catalog isn't the headline — the real point is that the cost is now O(1) per search instead of O(interactions), so it stays flat as the catalog grows. I'm not claiming a dramatic raw number because there isn't one at this scale; the repo also doesn't have a before/after React Profiler trace, so I'm not asserting more than the benchmark shows.
+This allows discovery through titles, descriptions, tags, category IDs, or exact product IDs.
 
 ---
 
-### 3. 🛒 Reducer-based cart state with undo
+#### ⚡ `useMemo` Optimization
 
-#### ❗ Problem
-
-Adding or removing items gave no confirmation, so accidental removals were hard to recover from.
-
-#### ✅ Solution
-
-Cart state lives in [`CartProvider.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/context/CartProvider.tsx) via `useReducer`, with explicit actions (`ADD_TO_CART`, `REMOVE_FROM_CART`, `INCREMENT`, `DECREMENT`, `CLEAR_CART`, `RESTORE_ITEM`), wired directly to Sonner toasts:
+Facet calculation and final filtering are memoized separately:
 
 ```ts
-function removeFromCart(productId: number) {
-  const item = cart.find((i) => i.id === productId);
-  dispatch({ type: "REMOVE_FROM_CART", payload: productId });
-  showRemoveFromCartToast(item, () => {
-    dispatch({ type: "RESTORE_ITEM", payload: item });
-  });
-}
+const facets = useMemo(
+  () => /* categories, price bounds, sale count */,
+  [searchedProducts],
+);
+
+const finalProducts = useMemo(
+  () => /* category/sale/price filtering */,
+  [searchedProducts, selectedCategories, onlyOnSale, priceRange],
+);
 ```
 
-**Instant feedback** — adding a product triggers a confirmation toast with a deep link to the cart.
+This prevents facet metadata from being recalculated when only local filter state changes.
 
+At the current catalog size of **46 products**, one facet calculation takes approximately **34µs**. In a simulated 1,200-render price-slider interaction, memoization reduced that calculation from 1,200 executions to 1, avoiding approximately **40ms of redundant work**.
+
+---
+
+### ❗ Problem: Lack of Cart Feedback
+
+Adding or removing items from the cart initially provided no visual confirmation. 
+This made interactions feel unclear, especially when removing products accidentally.
+
+### ✅ Solution: Reducer-Based Cart State with Undo Support
+
+Integrated Sonner toast notifications directly with a centralized cart state powered by `useReducer` and React Context to handle mutation feedback.
+
+#### 📦 1. Seamless Item Addition
+Adding a product instantly triggers a confirmation toast with a deep-link shortcut to the cart page.
 <p align="center">
   <img src="./screenshots/addToCartImg.png" width="60%" alt="Add to cart toast" />
 </p>
 
-**Undo rollback** — removing a product snapshots it before dispatch, so the toast's undo button restores it via `RESTORE_ITEM`.
+#### ⏳ 2. Undo Rollback
+Removing a product creates a temporary state snapshot, allowing the reducer to restore items through a dedicated `RESTORE_ITEM` action.
 
 <p align="center">
   <img src="./screenshots/undoCartImg.png" width="60%" alt="Undo action toast" />
 </p>
-
-<!-- ⚠️ these two screenshots exist for the Vite version but not in this repo yet. The component is functionally identical, but will re-shoot them from the Next build rather than copying the old files — the toast styling/position changed slightly (Toaster is now positioned with a top offset for the sticky header). -->
 
 ---
 
