@@ -55,6 +55,8 @@ Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vi
 | Static, generic `<title>` | Dynamic `generateMetadata()` per page |
 | `<img>` | `next/image` with `priority`/`sizes` |
 
+---
+
 #### ❗ Problem: client-rendered shell
 
 The Vite SPA shipped an essentially empty <body>:
@@ -181,34 +183,12 @@ This allows discovery through titles, descriptions, tags, category IDs, or exact
 
 ---
 
-#### ⚡ `useMemo` Optimization
-
-Facet calculation and final filtering are memoized separately:
-
-```ts
-const facets = useMemo(
-  () => /* categories, price bounds, sale count */,
-  [searchedProducts],
-);
-
-const finalProducts = useMemo(
-  () => /* category/sale/price filtering */,
-  [searchedProducts, selectedCategories, onlyOnSale, priceRange],
-);
-```
-
-This prevents facet metadata from being recalculated when only local filter state changes.
-
-At the current catalog size of **46 products**, one facet calculation takes approximately **34µs**. In a simulated 1,200-render price-slider interaction, memoization reduced that calculation from 1,200 executions to 1, avoiding approximately **40ms of redundant work**.
-
----
-
 ### ❗ Problem: Lack of Cart Feedback
 
 Adding or removing items from the cart initially provided no visual confirmation. 
 This made interactions feel unclear, especially when removing products accidentally.
 
-### ✅ Solution: Reducer-Based Cart State with Undo Support
+#### ✅ Solution: Reducer-Based Cart State with Undo Support
 
 Integrated Sonner toast notifications directly with a centralized cart state powered by `useReducer` and React Context to handle mutation feedback.
 
@@ -227,11 +207,9 @@ Removing a product creates a temporary state snapshot, allowing the reducer to r
 
 ---
 
-### 4. ⏳ Skeleton loading
+### ❗ Problem: Blank Loading States
 
-#### ❗ Problem
-
-Local JSON loads instantly, but the artificial delay added to category pages (and any real API in production) isn't instant — a full-page spinner caused layout jumps.
+Although local JSON loading is nearly instant, real API requests can introduce noticeable delays. Using a full-page spinner felt visually disruptive and caused layout jumps.
 
 #### ✅ Solution
 
@@ -248,8 +226,6 @@ Local JSON loads instantly, but the artificial delay added to category pages (an
   <br />
   <sub>Product page skeleton state</sub>
 </p>
-
-<!-- ⚠️ these two gifs are from the Vite repo. Will re-record them: the Next version's skeletons are driven by Suspense/loading.tsx now, not a useState isLoading flag, so the trigger mechanism is genuinely different even if the visual result looks similar. -->
 
 ---
 
@@ -294,11 +270,3 @@ npm run start
 ```
 
 ---
-
-## 📌 Future improvements
-
-- Add `sitemap.ts` for product/category discovery.
-- Add structured data (`Product`, `Offer`, `BreadcrumbList` JSON-LD).
-- Decide on and implement an explicit indexing policy for `/search` (currently no `robots.txt` or per-route `noindex` exists — the earlier draft claimed `/search` was excluded from indexing; it isn't yet, unless added).
-- Profile search interactions in production mode to get a real Profiler trace, not just the synthetic Node benchmark above.
-- Consider static generation/caching for stable product and category routes.
