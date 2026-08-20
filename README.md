@@ -46,14 +46,14 @@ Previous Vite version, kept live for comparison: [ReactShop — Vite](https://vi
 
 ### 🔄 Migration: Vite SPA → Next.js App Router
 
-| Before (Vite) | After (Next.js) |
-|---|---|
-| Client-rendered SPA | Server Components + streaming |
-| React Router DOM | File-system routing (`app/`) |
+| Before (Vite)                  | After (Next.js)                                  |
+| ------------------------------ | ------------------------------------------------ |
+| Client-rendered SPA            | Server Components + streaming                    |
+| React Router DOM               | File-system routing (`app/`)                     |
 | `useEffect` + `fetch` for data | `fs/promises` read directly in Server Components |
-| Global `isLoading` state | Route-level `loading.tsx` + `Suspense` |
-| Static, generic `<title>` | Dynamic `generateMetadata()` per page |
-| `<img>` | `next/image` with `priority`/`sizes` |
+| Global `isLoading` state       | Route-level `loading.tsx` + `Suspense`           |
+| Static, generic `<title>`      | Dynamic `generateMetadata()` per page            |
+| `<img>`                        | `next/image` with `priority`/`sizes`             |
 
 ---
 
@@ -77,10 +77,11 @@ Google does render JavaScript, but on a separate, delayed render queue — index
 #### ✅ Solution: Server Components render the initial HTML
 
 ```
-Request → Server Component → read data → render HTML → browser gets real content 
+Request → Server Component → read data → render HTML → browser gets real content
 ```
 
-[Server page:](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx):
+[Server page:](<https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/page.tsx>):
+
 ```ts
 export default async function CategoryPage({ params }: PageProps) {
   const { categoryId } = await params;
@@ -98,7 +99,8 @@ export default async function CategoryPage({ params }: PageProps) {
 
 SEO doesn't require giving up interactivity. Every route that needs both is split into a thin server `page.tsx` (data + metadata) and a `*Client.tsx` (interactive slice):
 
-[Product page implementation:](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx):
+[Product page implementation:](<https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/page.tsx>):
+
 ```
 category/[categoryId]/product/[productId]/
 ├── page.tsx  # Server: product lookup, generateMetadata, 404
@@ -106,6 +108,7 @@ category/[categoryId]/product/[productId]/
 ```
 
 👉 Result:
+
 <p align="center">
   <img src="./screenshots/openGraphSocials.png" width="90%" />
 </p>
@@ -114,8 +117,8 @@ category/[categoryId]/product/[productId]/
 
 #### 🔧 Other migration changes
 
-- [`loading.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/loading.tsx) per route instead of one global spinner
-- [`not-found.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/not-found.tsx) for a real `404` on a missing product
+- [`loading.tsx`](<https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/loading.tsx>) per route instead of one global spinner
+- [`not-found.tsx`](<https://github.com/KIB101D/reactshop-next/blob/main/app/(site)/category/%5BcategoryId%5D/product/%5BproductId%5D/not-found.tsx>) for a real `404` on a missing product
 - `next/image` with `priority` on the LCP hero image ([`Hero.tsx`](https://github.com/KIB101D/reactshop-next/blob/main/app/components/Hero.tsx)) and per-breakpoint `sizes` elsewhere
 
 ---
@@ -126,10 +129,10 @@ The original search could find products, but gave users limited feedback and con
 
 A query returned matching products, but the interface did not show:
 
-* how results were distributed across categories;
-* what price range was available;
-* how many products were on sale;
-* which filters were relevant to the current results.
+- how results were distributed across categories;
+- what price range was available;
+- how many products were on sale;
+- which filters were relevant to the current results.
 
 ---
 
@@ -182,7 +185,7 @@ This allows discovery through titles, descriptions, tags, category IDs, or exact
 
 ### ❗ Problem: Lack of Cart Feedback
 
-Adding or removing items from the cart initially provided no visual confirmation. 
+Adding or removing items from the cart initially provided no visual confirmation.
 This made interactions feel unclear, especially when removing products accidentally.
 
 #### ✅ Solution: Reducer-Based Cart State with Undo Support
@@ -190,7 +193,9 @@ This made interactions feel unclear, especially when removing products accidenta
 Integrated Sonner toast notifications directly with a centralized cart state powered by `useReducer` and React Context to handle mutation feedback.
 
 #### 📦 1. Seamless Item Addition
+
 Adding a product instantly triggers a confirmation toast with a deep-link shortcut to the cart page.
+
 <p align="center">
   <img src="./screenshots/addToCartImg.png" width="60%" alt="Add to cart toast" />
 </p>
@@ -198,6 +203,7 @@ Adding a product instantly triggers a confirmation toast with a deep-link shortc
 ---
 
 #### ⏳ 2. Undo Rollback
+
 Removing a product creates a temporary state snapshot, allowing the reducer to restore items through a dedicated `RESTORE_ITEM` action.
 
 <p align="center">
@@ -212,7 +218,7 @@ Although local JSON loading is nearly instant, real API requests can introduce n
 
 #### ✅ Solution
 
-`HomeSkeleton`, `ProductCardSkeleton`, and per-route `loading.tsx` files mirror the real layout exactly, built *after* the real JSX existed — specifically to keep Cumulative Layout Shift at zero.
+`HomeSkeleton`, `ProductCardSkeleton`, and per-route `loading.tsx` files mirror the real layout exactly, built _after_ the real JSX existed — specifically to keep Cumulative Layout Shift at zero.
 
 <p align="center">
   <img src="./screenshots/loadingSkeleton.gif" width="90%" />
@@ -221,7 +227,7 @@ Although local JSON loading is nearly instant, real API requests can introduce n
 </p>
 
 <p align="center">
-  <img src="./screenshots/loadingSkelotonsProduct.gif" width="90%" />
+  <img src="./screenshots/loadingSkeletonsProduct.gif" width="90%" />
   <br />
   <sub>Product page skeleton state</sub>
 </p>
