@@ -11,6 +11,7 @@ import {
 } from "@/app/lib/data/products";
 
 async function HomeContent() {
+  await new Promise((resolve) => setTimeout(resolve, 1200));
   const [categories, flashProducts, featuredProducts] = await Promise.all([
     getCategories(),
     getFlashSaleProducts(),

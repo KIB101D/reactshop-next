@@ -68,34 +68,30 @@ export default function ProductDetailsClient({
                   </button>
                 ))}
               </div>
-              {/* Status & Rating line */}
-              <div className="flex items-center gap-2 text-sm">
-                {product.rating && (
-                  <>
-                    <div className="flex items-center gap-1 font-semibold text-gray-700">
-                      <span className="text-amber-400">★</span>
-                      <span>{product.rating}</span>
-                    </div>
-                  </>
-                )}
-                <span className="text-gray-300">•</span>
-                <span className="font-bold text-green-600">In stock</span>
-              </div>
             </div>
 
             <div className="flex-1 hidden lg:block" />
 
             <div className="flex flex-col gap-5">
-              {/* Price */}
-              <div className="flex items-baseline gap-3">
-                <p className="text-5xl font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
-                  ${product.price}
-                </p>
+              {/* Price + Rating */}
+              <div className="flex items-end gap-4">
+                <div className="flex items-baseline gap-3">
+                  <p className="text-5xl font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+                    ${product.price}
+                  </p>
 
-                {isOnSale && (
-                  <span className="text-2xl font-normal text-gray-400 line-through">
-                    ${product.oldPrice}
-                  </span>
+                  {isOnSale && (
+                    <span className="text-2xl font-normal text-gray-400 line-through">
+                      ${product.oldPrice}
+                    </span>
+                  )}
+                </div>
+
+                {product.rating && (
+                  <div className="flex items-center gap-1 pb-1 font-semibold text-gray-700">
+                    <span className="text-amber-400">★</span>
+                    <span>{product.rating}</span>
+                  </div>
                 )}
               </div>
 
@@ -104,8 +100,12 @@ export default function ProductDetailsClient({
                 {product.description}
               </p>
 
-              {/* Add to Cart Button */}
+              {/* Stock + Add to Cart */}
               <div className="flex flex-col items-start gap-3 pt-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">•</span>{" "}
+                  <span className="font-bold text-green-600">In stock</span>
+                </div>
                 <button
                   onClick={() => addToCart(product)}
                   className="w-full px-8 py-4 text-base font-medium text-white transition-all bg-black rounded-xl hover:bg-gray-800 active:scale-[0.985] lg:min-w-[400px] lg:w-auto cursor-pointer"
@@ -127,6 +127,7 @@ export default function ProductDetailsClient({
             <div className="space-y-4">
               {relatedProducts.map((item) => {
                 const itemOnSale = item.oldPrice && item.oldPrice > item.price;
+
                 return (
                   <Link
                     key={item.id}
@@ -135,6 +136,7 @@ export default function ProductDetailsClient({
                   >
                     <div className="relative overflow-hidden bg-gray-100 rounded-xl w-18 h-18 shrink-0">
                       <ProductImage src={item.image} alt={item.title} />
+
                       {itemOnSale && (
                         <span className="absolute top-1 left-1 z-10 px-1 py-0.5 text-[8px] font-bold text-white bg-rose-500 rounded">
                           Sale
@@ -151,6 +153,7 @@ export default function ProductDetailsClient({
                         <p className="text-sm font-semibold text-gray-900">
                           ${item.price}
                         </p>
+
                         {itemOnSale && (
                           <span className="text-xs text-gray-400 line-through">
                             ${item.oldPrice}

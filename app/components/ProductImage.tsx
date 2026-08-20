@@ -3,7 +3,17 @@
 import { useState } from "react";
 import Image from "next/image";
 
-function ProductImage({ src, alt }: { src: string; alt: string }) {
+type ProductImageProps = {
+  src: string;
+  alt: string;
+  sizes?: string;
+};
+
+function ProductImage({
+  src,
+  alt,
+  sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw",
+}: ProductImageProps) {
   const [imageError, setImageError] = useState(false);
 
   if (imageError) {
@@ -19,6 +29,7 @@ function ProductImage({ src, alt }: { src: string; alt: string }) {
       src={src}
       alt={alt}
       fill
+      sizes={sizes}
       onError={() => setImageError(true)}
       className="object-cover transition duration-300 hover:scale-105"
     />
