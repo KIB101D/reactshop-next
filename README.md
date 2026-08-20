@@ -72,6 +72,8 @@ There's the issue: product data, categories, prices, and headings only existed a
 
 Google does render JavaScript, but on a separate, delayed render queue — indexing can lag days or weeks behind raw HTML, which gets indexed immediately. Link-preview crawlers don't render JS at all: Open Graph scrapers for Slack, Twitter, and Facebook read raw HTML only, so a product link pasted into a chat would show a blank preview. And Google's JS rendering isn't the baseline either — Bing, DuckDuckGo, and others have weaker or no JS rendering support.
 
+---
+
 #### ✅ Solution: Server Components render the initial HTML
 
 ```
@@ -109,10 +111,6 @@ category/[categoryId]/product/[productId]/
 </p>
 
 ---
-
-#### 🛣️ Routing
-
-React Router's `/category/:categoryId/product/:productId` became file-system routing: `app/(site)/category/[categoryId]/product/[productId]/page.tsx`. Dynamic segments live in the folder structure instead of a central router config.
 
 #### 🔧 Other migration changes
 
@@ -196,6 +194,8 @@ Adding a product instantly triggers a confirmation toast with a deep-link shortc
 <p align="center">
   <img src="./screenshots/addToCartImg.png" width="60%" alt="Add to cart toast" />
 </p>
+
+---
 
 #### ⏳ 2. Undo Rollback
 Removing a product creates a temporary state snapshot, allowing the reducer to restore items through a dedicated `RESTORE_ITEM` action.
