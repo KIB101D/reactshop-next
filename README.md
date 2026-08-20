@@ -142,23 +142,21 @@ The search experience was redesigned around the **current result set**.
 The pipeline is intentionally split into three stages:
 
 ```text
-1. getProducts()
+1. getProducts()  (server, page.tsx)
    ↓
-   All products
+   all products
 
-2. filterProductsByQuery(query)
+2. filterProducts(products, query)  (app/utils/filterProducts.ts)
    ↓
-   searchedProducts — products matching the query
+   filtered — products matching the query
    │
-   └──→ computeFacets(searchedProducts)
+   └──→ facets useMemo (SearchClient.tsx)
              ↓
-             available categories
-             min/max price
-             sale count
+             categories, min/max price, sale count
 
-3. filterBySelectedOptions(selectedFilters)
+3. processedProducts useMemo (SearchClient.tsx)
    ↓
-   finalProducts — rendered product grid
+   final grid — filtered narrowed by selected category/price/sale
 ```
 
 Facets are derived from `searchedProducts`, so the available categories, price range, and sale count always reflect the current search results rather than the full catalog.
