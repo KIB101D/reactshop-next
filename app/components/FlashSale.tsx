@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "../types";
 import { CountdownBadge } from "./CountdownBadge";
+import { isOnSale } from "../utils/isOnSale";
 
 const FLASH_SALE_ENDS_AT = new Date(
   Date.now() + 4 * 60 * 60 * 1000 + 12 * 60 * 1000 + 33 * 1000,
@@ -42,9 +43,11 @@ export function FlashSale({ products }: { products: Product[] }) {
             </p>
             <p className="font-semibold text-gray-900">
               ${product.price}{" "}
-              <span className="text-xs text-gray-400 line-through font-normal ml-1">
-                ${product.oldPrice}
-              </span>
+              {isOnSale(product) && (
+                <span className="text-xs text-gray-400 line-through font-normal ml-1">
+                  ${product.oldPrice}
+                </span>
+              )}
             </p>
           </Link>
         ))}
