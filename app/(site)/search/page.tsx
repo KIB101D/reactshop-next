@@ -12,5 +12,5 @@ export default async function SearchPage({ searchParams }: PageProps) {
   const products = await getProducts();
   const filtered = filterProducts(products, query);
 
-  return <SearchClient filtered={filtered} query={query} />;
+  return <SearchClient key={query} filtered={filtered} query={query} />;
 }
