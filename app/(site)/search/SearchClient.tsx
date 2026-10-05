@@ -8,6 +8,7 @@ import { sortProductsByPrice } from "@/app/utils/filterProductsByPrice";
 import SortToggleButton from "@/app/components/SortToggleButoon";
 import FilterSidebar from "@/app/components/FilterSidebar";
 import { SaleBadge } from "@/app/components/SaleBadge";
+import { isOnSale } from "@/app/utils/isOnSale";
 
 type SearchClientProps = {
   filtered: Product[];
@@ -48,9 +49,7 @@ export default function SearchClient({ filtered, query }: SearchClientProps) {
       const currentCount = categoryMap.get(product.categoryId) || 0;
       categoryMap.set(product.categoryId, currentCount + 1);
 
-      if (product.oldPrice && product.oldPrice > product.price) {
-        saleCount++;
-      }
+      if (isOnSale(product)) saleCount++;
 
       if (product.price < minPrice) minPrice = product.price;
       if (product.price > maxPrice) maxPrice = product.price;
@@ -74,10 +73,7 @@ export default function SearchClient({ filtered, query }: SearchClientProps) {
         return false;
       }
 
-      if (onlyOnSale) {
-        const isOnSale = product.oldPrice && product.oldPrice > product.price;
-        if (!isOnSale) return false;
-      }
+      if (onlyOnSale && !isOnSale(product)) return false;
 
       if (priceRange.min > 0 && product.price < priceRange.min) {
         return false;

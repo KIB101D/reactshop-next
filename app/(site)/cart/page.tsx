@@ -6,19 +6,19 @@ import Link from "next/link";
 import { useState } from "react";
 import CheckoutModal from "@/app/components/CheckoutModal";
 import { SaleBadge } from "@/app/components/SaleBadge";
+import { isOnSale } from "@/app/utils/isOnSale";
 
 function Cart() {
   const { cart, removeFromCart, increment, decrement, removeAllFromCart } =
     useCart();
 
   const subtotal = cart.reduce((sum, item) => {
-    const originalPrice =
-      item.oldPrice && item.oldPrice > item.price ? item.oldPrice : item.price;
+    const originalPrice = isOnSale(item) ? item.oldPrice : item.price;
     return sum + originalPrice * item.quantity;
   }, 0);
 
   const totalSavings = cart.reduce((sum, item) => {
-    if (item.oldPrice && item.oldPrice > item.price) {
+    if (isOnSale(item)) {
       return sum + (item.oldPrice - item.price) * item.quantity;
     }
     return sum;
@@ -61,9 +61,6 @@ function Cart() {
               </div>
             ) : (
               cart.map((product) => {
-                const isOnSale =
-                  product.oldPrice && product.oldPrice > product.price;
-
                 return (
                   <div
                     key={product.id}
@@ -93,7 +90,7 @@ function Cart() {
                             className="object-cover w-20 h-20 transition bg-gray-50 rounded-xl hover:opacity-80"
                           />
                         </Link>
-                        {isOnSale && (
+                        {isOnSale(product) && (
                           <SaleBadge
                             price={product.price}
                             oldPrice={product.oldPrice}
@@ -143,7 +140,7 @@ function Cart() {
 
                           {/* Price */}
                           <div className="flex items-baseline gap-2">
-                            {isOnSale && (
+                            {isOnSale(product) && (
                               <span className="text-xs text-gray-400 line-through">
                                 ${product.oldPrice! * product.quantity}
                               </span>

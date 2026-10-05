@@ -6,6 +6,7 @@ import { useCart } from "@/app/hooks/useCart";
 import type { Product } from "@/app/types";
 import ProductImage from "@/app/components/ProductImage";
 import { SaleBadge } from "@/app/components/SaleBadge";
+import { isOnSale } from "@/app/utils/isOnSale";
 
 type ProductDetailsClientProps = {
   product: Product;
@@ -21,7 +22,7 @@ export default function ProductDetailsClient({
   const { addToCart } = useCart();
   const router = useRouter();
 
-  const isOnSale = product.oldPrice && product.oldPrice > product.price;
+  const onSale = isOnSale(product);
 
   return (
     <main key={product.id} className="pt-0 pb-10">
@@ -30,7 +31,7 @@ export default function ProductDetailsClient({
         <div className="relative overflow-hidden bg-white shadow-sm rounded-2xl aspect-square lg:max-w-[620px] animate-fade-in">
           <ProductImage src={product.image} alt={product.title} />
 
-          {isOnSale && (
+          {onSale && (
             <SaleBadge
               price={product.price}
               oldPrice={product.oldPrice}
@@ -80,7 +81,7 @@ export default function ProductDetailsClient({
                     ${product.price}
                   </p>
 
-                  {isOnSale && (
+                  {onSale && (
                     <span className="text-2xl font-normal text-gray-400 line-through">
                       ${product.oldPrice}
                     </span>
@@ -126,7 +127,7 @@ export default function ProductDetailsClient({
 
             <div className="space-y-4">
               {relatedProducts.map((item) => {
-                const itemOnSale = item.oldPrice && item.oldPrice > item.price;
+                const itemOnSale = isOnSale(item);
 
                 return (
                   <Link
